@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `user_t` (
   `username` varchar(25) NOT NULL,
   `employee_id` int(10) NOT NULL,
   `password` varchar(25) NOT NULL,
-  `email` varchar(30) NOT NULL,
+  `email` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
