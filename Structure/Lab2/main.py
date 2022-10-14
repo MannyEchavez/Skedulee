@@ -117,5 +117,15 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+#this will route to the database page
+@app.route('/database')
+def database():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        return render_template('database.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run()
