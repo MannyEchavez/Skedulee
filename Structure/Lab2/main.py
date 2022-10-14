@@ -12,7 +12,7 @@ app.secret_key = 'your secret key'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'test'
+app.config['MYSQL_DB'] = 'Skedulee'
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -30,7 +30,7 @@ def login():
         password = request.form['password']
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Skedulee WHERE username = %s AND password = %s', (username, password,)) 
+        cursor.execute('SELECT * FROM user_t WHERE username = %s AND password = %s', (username, password,)) 
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists in accounts table in out database
@@ -38,7 +38,7 @@ def login():
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
             session['employee_id'] = account['employee_id']
-            session['usrname'] = account['username']
+            session['username'] = account['username']
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -71,7 +71,7 @@ def register():
 
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Skedulee WHERE username = %s', (username,))
+        cursor.execute('SELECT * FROM user_t WHERE username = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
         if account:
@@ -84,7 +84,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO Skedulee (username, password, email) VALUES ( %s, %s, %s)', (username, password, email,)) 
+            cursor.execute('INSERT INTO user_t (username, password, email) VALUES ( %s, %s, %s)', (username, password, email,)) 
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
@@ -110,7 +110,7 @@ def profile():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Skedulee WHERE id = %s', (session['id'],)) 
+        cursor.execute('SELECT * FROM user_t WHERE employee_id = %s', (session['employee_id'],)) 
         account = cursor.fetchone()
         # Show the profile page with account info
         return render_template('profile.html', account=account)
