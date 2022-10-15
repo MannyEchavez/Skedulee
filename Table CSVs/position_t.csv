@@ -1,0 +1,5 @@
+"Position","Description","Permissions"
+"As.Manager","Assist the manager in running the restaurant and make sure both customers and employees are happy.","1"
+"Cashier","Take orders and run the cash registers.","3"
+"Cook","Cook food for customers.","3"
+"Manager","Run the store and ensure all employees and customers are happy.","0"
