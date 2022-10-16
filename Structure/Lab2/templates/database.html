@@ -3,9 +3,185 @@
 {% block title %}Database{% endblock %}
 
 {% block content %}
-<h2>Database Page</h2>
-<p>Welcome back, {{ username }}!</p>
-#TODO: make database viewable
-
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="employeetable">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Wage/Salary</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in emp_t %}
+                <tr>
+                    <td>{{ item['employee_id'] }}</td>
+                    <td>{{ item['first_name'] }}</td>
+                    <td>{{ item['last_name'] }}</td>
+                    <td>{{ item['employee_email'] }}</td>
+                    <td>{{ item['wage_salary'] }}</td>
+                    <td>{{ item['phone_number'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="locationtable">
+            <thead>
+                <tr>
+                    <th>Store ID</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Store Address</th>
+                    <th>Zip Code</th>
+                    <th>Owner Name</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in loc_t %}
+                <tr>
+                    <td>{{ item['store_id'] }}</td>
+                    <td>{{ item['country'] }}</td>
+                    <td>{{ item['state'] }}</td>
+                    <td>{{ item['city'] }}</td>
+                    <td>{{ item['store_address'] }}</td>
+                    <td>{{ item['zip'] }}</td>
+                    <td>{{ item['owner'] }}</td>
+                    <td>{{ item['phone'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="notestable">
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in note_t %}
+                <tr>
+                    <td>{{ item['employee_id'] }}</td>
+                    <td>{{ item['description'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="positiontable">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Description</th>
+                    <th>Permissions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pos_t %}
+                <tr>
+                    <td>{{ item['position'] }}</td>
+                    <td>{{ item['description'] }}</td>
+                    <td>{{ item['permissions'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="rolestable">
+            <thead>
+                <tr>
+                    <th>Role ID</th>
+                    <th>Employee ID</th>
+                    <th>Position</th>
+                    <th>Store ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in rol_t %}
+                <tr>
+                    <td>{{ item['role_id'] }}</td>
+                    <td>{{ item['employee_id'] }}</td>
+                    <td>{{ item['position'] }}</td>
+                    <td>{{ item['store_id'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="shiftstable">
+            <thead>
+                <tr>
+                    <th>Shift ID</th>
+                    <th>Employee ID</th>
+                    <th>Position</th>
+                    <th>Store ID</th>
+                    <th>Date</th>
+                    <th>Timeslot</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in shf_t %}
+                <tr>
+                    <td>{{ item['shift_id'] }}</td>
+                    <td>{{ item['employee_id'] }}</td>
+                    <td>{{ item['position'] }}</td>
+                    <td>{{ item['store_id'] }}</td>
+                    <td>{{ item['date'] }}</td>
+                    <td>{{ item['timeslot'] }}</td>
+                    <td>{{ item['attendance'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="usertable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Employee ID</th>
+                    <th>Password</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in usr_t %}
+                <tr>
+                    <td>{{ item['username'] }}</td>
+                    <td>{{ item['employee_id'] }}</td>
+                    <td>{{ item['password'] }}</td>
+                    <td>{{ item['email'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

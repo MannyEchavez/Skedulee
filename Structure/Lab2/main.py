@@ -63,11 +63,12 @@ def register():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'employee_id' in request.form and 'password' in request.form and 'email' in request.form :
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+        employeeid = request.form['employee_id']
 
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -84,7 +85,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO user_t (username, password, email) VALUES ( %s, %s, %s)', (username, password, email,)) 
+            cursor.execute('INSERT INTO user_t (username, employee_id, password, email) VALUES ( %s, %s, %s, %s)', (username, employeeid, password, email,)) 
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
@@ -123,7 +124,22 @@ def database():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('database.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM employee_t')
+        emp_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM location_t')
+        loc_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM notes_t')
+        note_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM position_t')
+        pos_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM role_t')
+        rol_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM shift_t')
+        shf_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM user_t')
+        usr_t = cursor.fetchall()
+        return render_template('database.html', username=session['username'], emp_t=emp_t, loc_t=loc_t, note_t=note_t, pos_t=pos_t, rol_t=rol_t, shf_t=shf_t, usr_t=usr_t)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -136,6 +152,16 @@ def employeeprofiles():
         return render_template('employeeprofiles.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+#this will route to the schedule page
+@app.route('/schedule')
+def schedule():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        return render_template('schedule.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('schedule'))
 
 if __name__ == '__main__':
     app.run()

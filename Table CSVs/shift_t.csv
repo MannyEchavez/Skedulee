@@ -1,8 +1,0 @@
-"Shift ID","Employee ID","Position","Store ID","Date","Timeslot","Attendance"
-"0","0","As.Manager","0","2022-10-08","6:00 AM - 2:00 PM","Yes"
-"1","1","Cashier","0","2022-10-08","6:00 PM - 2:00 AM","Late"
-"2","2","Cook","0","2022-10-08","6:00 AM - 2:00 PM","Yes"
-"3","3","As.Manager","0","2022-10-08","1:00 PM - 9:00 PM","Yes"
-"4","5","Cook","0","2022-10-08","2:00 PM - 9:00 PM",NULL
-"5","4","Cashier","0","2022-10-08","2:00 PM - 9:00 PM",NULL
-"6","6","Manager","0","2022-10-08","12:00 PM - 6:00 PM","Yes"
