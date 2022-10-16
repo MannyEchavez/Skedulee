@@ -1,0 +1,40 @@
+Updating An Entry
+
+FORMAT
+
+UPDATE table
+SET columnname = newvalue
+WHERE condition
+
+EXAMPLE (PHPMYADMIN Syntax)
+
+UPDATE `Skedulee`.`employee_t` 
+SET `last_name` = 'Smith' 
+WHERE `employee_t`.`employee_id` = 4
+
+EXAMPLE (MYSQL Syntax)
+
+UPDATE employee_t
+SET last_name = Smith
+WHERE employee_id = 4
+
+__________________________________________________
+
+
+Deleting an Entry
+
+FORMAT
+
+DELETE FROM table
+WHERE condition;
+
+EXAMPLE(PHPMYADMIN Syntax)
+
+DELETE FROM `Skedulee`.`shift_t` 
+WHERE `shift_t`.`shift_id` = 5
+
+EXAMPLE(MYSQL Syntax)
+
+DELETE FROM shift_t
+WHERE shift_id = 5;
+
