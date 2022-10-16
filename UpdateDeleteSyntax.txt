@@ -2,6 +2,10 @@ Updating An Entry
 
 FORMAT
 
+UPDATE table
+SET columnname = newvalue
+WHERE condition
+
 EXAMPLE (PHPMYADMIN Syntax)
 
 UPDATE `Skedulee`.`employee_t` 
