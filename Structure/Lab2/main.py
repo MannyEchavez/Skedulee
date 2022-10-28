@@ -149,7 +149,13 @@ def employeeprofiles():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('employeeprofiles.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM employee_t')
+        emp_t = cursor.fetchall()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM notes_t')
+        note_t = cursor.fetchall()
+        return render_template('employeeprofiles.html', username=session['username'], emp_t=emp_t, note_t=note_t) 
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
