@@ -4,8 +4,26 @@
 
 {% block content %}
 <h2>Profiles Page</h2>
-<p>Welcome back, {{ username }}!</p>
-#TODO: make profiles viewable
-
+<p></p>
+<!---TODO: Inserting Search function here *dab*-->
+{% for item in emp_t %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Employee {{ item['employee_id'] }} </h5>
+      <p class="card-text"></p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ item['first_name'] }}  {{ item['last_name'] }}</li>
+      <li class="list-group-item">{{ item['employee_email'] }}</li>
+      <li class="list-group-item">{{ item['phone_number'] }}</li>
+      <li class="list-group-item">{{ item['wage_salary'] }} per hour</li>
+    </ul>
+    <div class="card-body">
+        <!--TODO: create button functionalities-->
+        <a href="#" class="btn btn-danger">Notes</a>
+        <a href="#" class="btn btn-danger">Edit</a>
+        <a href="#" class="btn btn-danger">Delete</a>
+    </div>
+{% endfor %}
 
 {% endblock %}
