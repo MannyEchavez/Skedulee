@@ -1,7 +1,18 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Calculator{% endblock %}
 
 {% block content %}
-<h2>Labor Productivity Calculator</h2
+<h2>Labor Productivity Calculator</h2> 
+<form>
+    <label for="startTime">Start Time:</label><br>
+    <input type="text" id="startTime" name="starTime"><br>
+    <label for="endTime">End Time:</label><br>
+    <input type="text" id="endTime" name="endTime"><br>
+    <label for="Profits:">Profits:</label><br>
+    <input type="text" id="Profits" name="Profits"><br>
+    <label for="Cost:">Cost:</label><br>
+    <input type="text" id="Cost" name="Cost"><br>
+    <input type="submit" value="Submit">
+</form>
 {% endblock %}
