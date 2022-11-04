@@ -104,6 +104,16 @@ def home():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+# http://localhost:5000/pythinlogin/calculator - this will be the labor productivity calculator, only accessible for loggedin users
+@app.route('/calculator')
+def calculator():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        return render_template('calculator.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/profile')
 def profile():

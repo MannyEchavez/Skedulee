@@ -4,12 +4,11 @@
 
 {% block content %}
 <h2>Profiles Page</h2>
-<p></p>
 <!---TODO: Inserting Search function here *dab*-->
 {% for item in emp_t %}
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <h5 class="card-title">Employee {{ item['employee_id'] }} </h5>
+      <h5 class="card-title">Employee {{ item['employee_id'] }} <img src="../static/defaultpfp.png" width="50px"> </h5>
       <p class="card-text"></p>
     </div>
     <ul class="list-group list-group-flush">
