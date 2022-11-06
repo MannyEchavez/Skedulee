@@ -4,7 +4,21 @@
 
 {% block content %}
 <!---TODO: insert tables into seperate tabs, make it look prettier-->
+<div class = "dropdown mt-3">
+    <button class="btn btn-secondary dropdown-toggle" type = "button"
+    id="database-dropdown" data-bs-toggle="dropdown">
 
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="database-dropdown">
+        <li><a href="#" class="dropdown-item">Employee Table</a></li>
+        <li><a class="dropdown-item" href="#">Location Table</a></li>
+        <li><a class="dropdown-item" href="#">Notes Table</a></li>
+        <li><a class="dropdown-item" href="#">Position Table</a></li>
+        <li><a class="dropdown-item" href="#">Roles Table</a></li>
+        <li><a class="dropdown-item" href="#">Shifts Table</a></li>
+        <li><a class="dropdown-item" href="#">User Table</a></li>
+    </ul>
+</div>
 <div class="flex-container">
     <div class="col">
         <table class="display" id="employeetable">
