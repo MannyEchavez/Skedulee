@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Labor Productivity Calculator</h2> 
-<form>
+<!--<form onsubmit="myFunction()">
     <label for="startTime">Start Time:</label><br>
     <input type="text" id="startTime" name="starTime"><br>
     <label for="endTime">End Time:</label><br>
@@ -14,5 +14,22 @@
     <label for="Cost:">Cost:</label><br>
     <input type="text" id="Cost" name="Cost"><br>
     <input type="submit" value="Submit">
+    <button onclick="add(document.getElementById('a').value,document.getElementById('b').value)">Add</button>
 </form>
+-->
+
+Hours:  <input type="number" name="a" id="a"><br>
+Profit: <input type="number" name="b" id="b"><br>
+Cost:   <input type="number" name="c" id="c"><br>
+<button onclick="Calculate(document.getElementById('a').value,document.getElementById('b').value, document.getElementById('c').value)">Calculate Per Hour Productivity</button>
+<button onclick="Calculate1(document.getElementById('a').value,document.getElementById('b').value, document.getElementById('c').value)">Calculate Per Employee Productivity</button>
+
+
+<script>
+  function Calculate(a, b, c) {
+    var division = parseInt(b, 10) - parseInt(c, 10);
+    var perHour = division / parseInt(a, 10)
+    alert('Per hour productivity: ' + '$'+perHour);
+  }
+</script>
 {% endblock %}
