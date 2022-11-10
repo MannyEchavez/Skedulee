@@ -110,7 +110,10 @@ def calculator():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('calculator.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT date, start_time, end_time FROM shift_t')
+        shifts = cursor.fetchall()
+        return render_template('calculator.html', username=session['username'], value = shifts)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 12, 2022 at 07:11 PM
+-- Generation Time: Nov 07, 2022 at 05:09 PM
 -- Server version: 5.6.37
 -- PHP Version: 5.6.31
 
@@ -152,7 +152,8 @@ CREATE TABLE IF NOT EXISTS `shift_t` (
   `position` char(15) NOT NULL,
   `store_id` int(10) NOT NULL,
   `date` date NOT NULL,
-  `timeslot` char(20) NOT NULL,
+  `start_time` varchar(5) NOT NULL,
+  `end_time` varchar(5) NOT NULL,
   `attendence` char(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -160,14 +161,14 @@ CREATE TABLE IF NOT EXISTS `shift_t` (
 -- Dumping data for table `shift_t`
 --
 
-INSERT INTO `shift_t` (`shift_id`, `employee_id`, `position`, `store_id`, `date`, `timeslot`, `attendence`) VALUES
-(0, 0, 'As.Manager', 0, '2022-10-08', '6:00 AM - 2:00 PM', 'Yes'),
-(1, 1, 'Cashier', 0, '2022-10-08', '6:00 PM - 2:00 AM', 'Late'),
-(2, 2, 'Cook', 0, '2022-10-08', '6:00 AM - 2:00 PM', 'Yes'),
-(3, 3, 'As.Manager', 0, '2022-10-08', '1:00 PM - 9:00 PM', 'Yes'),
-(4, 5, 'Cook', 0, '2022-10-08', '2:00 PM - 9:00 PM', NULL),
-(5, 4, 'Cashier', 0, '2022-10-08', '2:00 PM - 9:00 PM', NULL),
-(6, 6, 'Manager', 0, '2022-10-08', '12:00 PM - 6:00 PM', 'Yes');
+INSERT INTO `shift_t` (`shift_id`, `employee_id`, `position`, `store_id`, `date`, `start_time`, `end_time`, `attendence`) VALUES
+(0, 0, 'As.Manager', 0, '2022-10-08', '6:00', '14:00', 'Yes'),
+(1, 1, 'Cashier', 0, '2022-10-08', '6:00', '14:00', 'Late'),
+(2, 2, 'Cook', 0, '2022-10-08', '6:00', '14:00', 'Yes'),
+(3, 3, 'As.Manager', 0, '2022-10-08', '13:00', '21:00', 'Yes'),
+(4, 5, 'Cook', 0, '2022-10-08', '14:00', '21:00', NULL),
+(5, 4, 'Cashier', 0, '2022-10-08', '14:00', '21:00', NULL),
+(6, 6, 'Manager', 0, '2022-10-08', '12:00', '18:00', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -178,16 +179,15 @@ INSERT INTO `shift_t` (`shift_id`, `employee_id`, `position`, `store_id`, `date`
 CREATE TABLE IF NOT EXISTS `user_t` (
   `username` varchar(25) NOT NULL,
   `employee_id` int(10) NOT NULL,
-  `password` varchar(25) NOT NULL,
-  `email` varchar(30) NOT NULL
+  `password` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_t`
 --
 
-INSERT INTO `user_t` (`username`, `employee_id`, `password`,`email`) VALUES
-('chck44', 6, 'Ch1ch_1$_B3$t', 'chck@chck.com');
+INSERT INTO `user_t` (`username`, `employee_id`, `password`) VALUES
+('chck44', 6, 'Ch1ch_1$_B3$t');
 
 --
 -- Indexes for dumped tables

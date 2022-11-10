@@ -5,14 +5,22 @@
 {% block content %}
 <h2>Labor Productivity Calculator</h2> 
 <form>
+    <label for="startDate">Start Date:</label><br>
+    SD: <input type="text" id="SD" name="startDate"><br>
+    <label for="endDate">End Date:</label><br>
+    ED: <input type="text" id="ED" name="endDate"><br>
     <label for="startTime">Start Time:</label><br>
-    <input type="text" id="startTime" name="starTime"><br>
+    ST: <input type="text" id="ST" name="startTime"><br>
     <label for="endTime">End Time:</label><br>
-    <input type="text" id="endTime" name="endTime"><br>
+    ET: <input type="text" id="ET" name="endTime"><br>
     <label for="Profits:">Profits:</label><br>
-    <input type="text" id="Profits" name="Profits"><br>
-    <label for="Cost:">Cost:</label><br>
-    <input type="text" id="Cost" name="Cost"><br>
-    <input type="submit" value="Submit">
+    P: <input type="number" id="P" name="Profits"><br>
+    <button onclick = "run(P, SD, ED, ST, ET)">Calculate</button>
 </form>
+<script src = "Structure/Lab2/templates/productivityCalculations.js">
+    function run(P, SD, ED, ST, ET){
+        //alert(productivityCalculator(P.value, SD.value, ED.value, ST.value, ET.value, {value}));
+        alert(1);
+    }
+</script>
 {% endblock %}
