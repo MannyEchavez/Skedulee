@@ -4,32 +4,23 @@
 
 {% block content %}
 <h2>Labor Productivity Calculator</h2> 
-<!--<form onsubmit="myFunction()">
+<form>
+    <label for="startDate">Start Date:</label><br>
+    SD: <input type="text" id="SD" name="startDate"><br>
+    <label for="endDate">End Date:</label><br>
+    ED: <input type="text" id="ED" name="endDate"><br>
     <label for="startTime">Start Time:</label><br>
-    <input type="text" id="startTime" name="starTime"><br>
+    ST: <input type="text" id="ST" name="startTime"><br>
     <label for="endTime">End Time:</label><br>
-    <input type="text" id="endTime" name="endTime"><br>
+    ET: <input type="text" id="ET" name="endTime"><br>
     <label for="Profits:">Profits:</label><br>
-    <input type="text" id="Profits" name="Profits"><br>
-    <label for="Cost:">Cost:</label><br>
-    <input type="text" id="Cost" name="Cost"><br>
-    <input type="submit" value="Submit">
-    <button onclick="add(document.getElementById('a').value,document.getElementById('b').value)">Add</button>
+    P: <input type="number" id="P" name="Profits"><br>
+    <button onclick = "run(P, SD, ED, ST, ET)">Calculate</button>
 </form>
--->
-
-Hours:  <input type="number" name="a" id="a"><br>
-Profit: <input type="number" name="b" id="b"><br>
-Cost:   <input type="number" name="c" id="c"><br>
-<button onclick="Calculate(document.getElementById('a').value,document.getElementById('b').value, document.getElementById('c').value)">Calculate Per Hour Productivity</button>
-<button onclick="Calculate1(document.getElementById('a').value,document.getElementById('b').value, document.getElementById('c').value)">Calculate Per Employee Productivity</button>
-
-
-<script>
-  function Calculate(a, b, c) {
-    var division = parseInt(b, 10) - parseInt(c, 10);
-    var perHour = division / parseInt(a, 10)
-    alert('Per hour productivity: ' + '$'+perHour);
-  }
+<script src = "Structure/Lab2/templates/productivityCalculations.js">
+    function run(P, SD, ED, ST, ET){
+        //alert(productivityCalculator(P.value, SD.value, ED.value, ST.value, ET.value, {value}));
+        alert(1);
+    }
 </script>
 {% endblock %}
