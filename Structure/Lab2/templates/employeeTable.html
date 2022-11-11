@@ -20,6 +20,32 @@
         <li><a href="{{ url_for('employeeTable') }}">Employee Table</a></li>
     </ul>
 </div>
-
-
+<div class="flex-container">
+    <div class="col">
+        <table class="display" id="employeetable">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Wage/Salary</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in emp_t %}
+                <tr>
+                    <td>{{ item['employee_id'] }}</td>
+                    <td>{{ item['first_name'] }}</td>
+                    <td>{{ item['last_name'] }}</td>
+                    <td>{{ item['employee_email'] }}</td>
+                    <td>{{ item['wage_salary'] }}</td>
+                    <td>{{ item['phone_number'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

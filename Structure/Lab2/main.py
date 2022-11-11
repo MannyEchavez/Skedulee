@@ -182,5 +182,99 @@ def schedule():
     # User is not loggedin redirect to login page
     return redirect(url_for('schedule'))
 
+@app.route('/employeeTable')
+def employeeTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM employee_t')
+        emp_t = cursor.fetchall()
+
+        return render_template('employeeTable.html', username=session['username'], emp_t=emp_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/locationTable')
+def locationTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM location_t')
+        loc_t = cursor.fetchall()
+
+        return render_template('locationTable.html', username=session['username'], loc_t=loc_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/userTable')
+def userTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM user_t')
+        usr_t = cursor.fetchall()
+
+        return render_template('userTable.html', username=session['username'], usr_t = usr_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/shiftsTable')
+def shiftsTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM shift_t')
+        shf_t = cursor.fetchall()
+
+        return render_template('shiftsTable.html', username=session['username'], shf_t=shf_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/rolesTable')
+def rolesTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM role_t')
+        rol_t = cursor.fetchall()
+
+        return render_template('rolesTable.html', username=session['username'], rol_t=rol_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/positionTable')
+def positionTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM position_t')
+        pos_t = cursor.fetchall()
+
+        return render_template('positionTable.html', username=session['username'], pos_t = pos_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/notesTable')
+def notesTable():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM notes_t')
+        note_t = cursor.fetchall()
+
+        return render_template('notesTable.html', username=session['username'], note_t = note_t)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+
+
+
 if __name__ == '__main__':
     app.run()
