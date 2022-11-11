@@ -178,7 +178,10 @@ def schedule():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('schedule.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM shift_t')
+        shifts = cursor.fetchall()
+        return render_template('schedule.html', username=session['username'], shifts=shifts)
     # User is not loggedin redirect to login page
     return redirect(url_for('schedule'))
 
