@@ -110,19 +110,49 @@ def calculator():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM shift_t')
-        shifts = cursor.fetchall()
         return render_template('calculator.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/send_data', methods = ['POST'])
+@app.route('/calculator', methods = ['POST'])
 def get_data_from_html():
+    if request.method == 'POST':
+        sd = request.form['startDate']
+        ed = request.form['endDate']
         st = request.form['startTime']
-        print ("Start Time is " + st)
-        return "Data sent. Please check your program log"
+        et = request.form['endTime']
+        p = request.form['Profits']
 
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT start_time, end_time FROM shift_t WHERE date <= %s AND date >= %s', (sd, ed))
+        shifts = cursor.fetchall()
+        startList = [i for i in shifts[0]]
+        endList = [i for i in shifts[1]]
+
+        # make sure inputs are correct, fix if needed, then fix if statements to use minutes intstead of hours and minutes
+
+        hours = 0.0
+        startSplit = [eval(i) for i in st.split(":")]
+        start = int(startSplit[0])*60 + int(startSplit[1])
+        endSplit = [eval(i) for i in et.split(":")]
+        end = int(endSplit[0])*60 + int(endSplit[1])
+        for x, y in startList, endList:
+            shiftStart = [eval(i) for i in x.split(":")]
+            shiftEnd = [eval(i) for i in y.split(":")]
+            if(shiftStart[0] > end[0] or (shiftStart[0] == end[0] and shiftStart[1] > end[1]) or shiftEnd[0] < start[0] or (shiftEnd[0] == start[0] or shiftEnd[1] < start[1])):
+                # if the start of the shift is after the desired end OR the end of the shift is before the desired start, then no need to check hours
+                return 0.0
+            if(shiftStart[0] < start[0] or (shiftStart[0] == start[0] and shiftStart[1] < start[1])):
+                # if the start of the shift is before the desired start, then adjust to only use the hours during the desired shift
+                shiftStart[0] = start[0]
+                shiftStart[1] = start[1]
+            if(shiftEnd[0] > end[0] or (shiftEnd[0] == end[0] and shiftEnd[1] > end[1])):
+                # if the end of the shift is after the desired end, then adjust to only use the hours during the desired shift
+                shiftEnd[0] = end[0]
+                shiftEnd[1] = end[1]
+            hours +=  ((shiftEnd[0]*60 + shiftEnd[1]) - (shiftStart[0]*60 + shiftStart[1]))/60.0
+        productivity = float(int((int(p) / hours) * 100.0))/100.0
+        return render_template('calculator.html', productivity = productivity)
 
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/profile')
