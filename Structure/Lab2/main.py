@@ -117,6 +117,13 @@ def calculator():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/send_data', methods = ['POST'])
+def get_data_from_html():
+        st = request.form['startTime']
+        print ("Start Time is " + st)
+        return "Data sent. Please check your program log"
+
+
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/profile')
 def profile():

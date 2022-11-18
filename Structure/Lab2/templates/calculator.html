@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Labor Productivity Calculator</h2> 
-<form>
+<form method="POST" action = "/send_data">
     <label for="startDate">Start Date:</label><br>
     SD: <input type="text" id="SD" name="startDate"><br>
     <label for="endDate">End Date:</label><br>
@@ -15,12 +15,7 @@
     ET: <input type="text" id="ET" name="endTime"><br>
     <label for="Profits:">Profits:</label><br>
     P: <input type="number" id="P" name="Profits"><br>
-    <button onclick = "run(P, SD, ED, ST, ET)">Calculate</button>
+    <input class="btn btn-primary" type="submit" value="Calculate">
 </form>
-<script src = "Structure/Lab2/templates/productivityCalculations.js">
-    function run(P, SD, ED, ST, ET){
-        //alert(productivityCalculator(P.value, SD.value, ED.value, ST.value, ET.value, {value}));
-        alert(1);
-    }
-</script>
+
 {% endblock %}
