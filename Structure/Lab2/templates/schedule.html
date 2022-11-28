@@ -7,7 +7,14 @@
   <link rel="stylesheet" href="../static/calendar-20/fonts/icomoon/style.css">
   <link href='../static/calendar-20/fullcalendar/packages/core/main.css' rel='stylesheet' />
   <link href='../static/calendar-20/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
+  <script src="function.js"></script>
   <body>
+  <!--ADD AND DELETE SHIFT BUTTONS HERE-->
+  <form method="POST">
+    <input class="btn btn-danger" type="submit" name="shift" value="Add Shift">
+    <input class="btn btn-danger" type="submit" name="shift" value="Delete Shift">
+  </form>
+  <!--BEGINNING OF CALENDAR RENDERING-->
   <div id='calendar-container'>
     <div id='calendar'></div>
   </div>
@@ -19,6 +26,7 @@
     <script src='../static/calendar-20/fullcalendar/packages/daygrid/main.js'></script>
     <script src='../static/calendar-20/fullcalendar/packages/timegrid/main.js'></script>
     <script src='../static/calendar-20/fullcalendar/packages/list/main.js'></script>
+    <!--CALENDAR JAVASCRIPT-->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
       var calendarEl = document.getElementById('calendar');

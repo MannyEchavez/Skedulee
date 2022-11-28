@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
@@ -230,6 +230,15 @@ def schedule():
     # User is not loggedin redirect to login page
     return redirect(url_for('schedule'))
 
+@app.route('/schedule')
+def addShift():
+    if request.method == ['POST']:
+        if request.form['shift'] == ['Add']:
+            flash("Added")
+        elif request.form['shift'] == ['Delete']:
+            flash("Deleted")
+    elif request.method == ['GET']:
+        return render_template('schedule.html', username=session['username'])
 
 
 if __name__ == '__main__':

@@ -13,3 +13,19 @@ function search() {
         }
     }
 }
+
+function profileNotes(){
+    alert("test"); //alert can be used to create a lil pop up message, just replace "test" with the necessary info if possible. or this may be deleted as well.
+}
+
+function profileEdit(){
+  //form would go here for editting profiles
+
+}
+
+function profileDelete(){
+  //not sure if we'll need this tho
+}
+
+//we may need this file still in order to create a pop-up form when editting profiles. 
+
