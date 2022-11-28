@@ -6,6 +6,7 @@
 <h2>Profiles Page</h2>
 <!---TODO: Inserting Search function here *dab*-->
 {% for item in emp_t %}
+<script src="profiles.js"></script>
 <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">Employee {{ item['employee_id'] }} <img src="../static/defaultpfp.png" width="50px"> </h5>
@@ -19,9 +20,9 @@
     </ul>
     <div class="card-body">
         <!--TODO: create button functionalities-->
-        <a href="#" class="btn btn-danger">Notes</a>
-        <a href="#" class="btn btn-danger">Edit</a>
-        <a href="#" class="btn btn-danger">Delete</a>
+        <a href="#" class="btn btn-danger" onclick="con()">Notes</a>
+        <a href="#" class="btn btn-danger" onclick="profileEdit()">Edit</a>
+        <a href="#" class="btn btn-danger" onclick="profileDelete()">Delete</a>
     </div>
 {% endfor %}
 

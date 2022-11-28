@@ -114,6 +114,54 @@ def calculator():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/calculator', methods = ['POST'])
+def get_data_from_html():
+    if request.method == 'POST':
+        sd = request.form['startDate']
+        ed = request.form['endDate']
+        st = request.form['startTime']
+        et = request.form['endTime']
+        p = request.form['Profits']
+        if(p != None and p != ""):
+            p = float(p)
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # make sure inputs are correct, fix if needed, then fix if statements to use minutes intstead of hours and minutes
+        cursor.execute('SELECT start_time, end_time FROM shift_t WHERE date <= %s AND date >= %s', (sd, ed))
+        mysql.connection.commit()
+        raw = cursor.fetchall()
+        start = list()
+        end = list()
+        for row in raw:
+            start.append(row.get("start_time"))
+            end.append(row.get("end_time"))
+
+        minutes = 0
+        startSplit = [eval(i) for i in st.split(":")]
+        timeStart = int(startSplit[0])*60 + int(startSplit[1])
+        endSplit = [eval(i) for i in et.split(":")]
+        timeEnd = int(endSplit[0])*60 + int(endSplit[1])
+        for x, y in zip(start, end):
+            shiftStartSplit = [eval(i) for i in x.split(":")]
+            shiftStart = int(shiftStartSplit[0]*60 + int(shiftStartSplit[1]))
+            shiftEndSplit = [eval(i) for i in y.split(":")]
+            shiftEnd = int(shiftEndSplit[0]*60 + int(shiftEndSplit[1]))
+            if(shiftStart > timeEnd or shiftEnd < timeStart):
+                # if the start of the shift is after the desired end OR the end of the shift is before the desired start, then no need to check hours
+                break
+            if(shiftStart < timeStart):
+                # if the start of the shift is before the desired start, then adjust to only use the hours during the desired shift
+                shiftStart = timeStart
+            if(shiftEnd > timeEnd):
+                # if the end of the shift is after the desired end, then adjust to only use the hours during the desired shift
+                shiftEnd = timeEnd
+            minutes +=  shiftEnd - shiftStart
+        hours = minutes / 60.0
+        productivity = float(int((p / hours) * 100.0))/100.0
+        cursor.close()
+        return render_template('calculator.html', productivity = productivity)
+
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/profile')
 def profile():
@@ -175,9 +223,14 @@ def schedule():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('schedule.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM shift_t')
+        shifts = cursor.fetchall()
+        return render_template('schedule.html', username=session['username'], shifts=shifts)
     # User is not loggedin redirect to login page
     return redirect(url_for('schedule'))
+
+
 
 if __name__ == '__main__':
     app.run()

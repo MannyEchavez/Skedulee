@@ -4,15 +4,19 @@
 
 {% block content %}
 <h2>Labor Productivity Calculator</h2> 
-<form>
+<form method="POST" action = "/calculator">
+    <label for="startDate">Start Date:</label><br>
+    SD: <input type="date" id="SD" name="startDate"><br>
+    <label for="endDate">End Date:</label><br>
+    ED: <input type="date" id="ED" name="endDate"><br>
     <label for="startTime">Start Time:</label><br>
-    <input type="text" id="startTime" name="starTime"><br>
+    ST: <input type="text" id="ST" name="startTime"><br>
     <label for="endTime">End Time:</label><br>
-    <input type="text" id="endTime" name="endTime"><br>
+    ET: <input type="text" id="ET" name="endTime"><br>
     <label for="Profits:">Profits:</label><br>
-    <input type="text" id="Profits" name="Profits"><br>
-    <label for="Cost:">Cost:</label><br>
-    <input type="text" id="Cost" name="Cost"><br>
-    <input type="submit" value="Submit">
+    P: <input type="number" id="P" name="Profits"><br>
+    <input class="btn btn-primary" type="submit" value="Calculate">
+    <P>{{productivity}}</P>
 </form>
+
 {% endblock %}
