@@ -9,11 +9,6 @@
   <link href='../static/calendar-20/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
   <script src="function.js"></script>
   <body>
-  <!--ADD AND DELETE SHIFT BUTTONS HERE-->
-  <form method="POST">
-    <input class="btn btn-danger" type="submit" name="shift" value="Add Shift">
-    <input class="btn btn-danger" type="submit" name="shift" value="Delete Shift">
-  </form>
   <!--BEGINNING OF CALENDAR RENDERING-->
   <div id='calendar-container'>
     <div id='calendar'></div>
@@ -50,6 +45,37 @@
       });
     </script>
     <script src="../static/calendar-20/js/main.js"></script>
+    <!--ADD AND DELETE SHIFT BUTTONS HERE-->
+    <form method="POST" action="/schedule">
+      <div class="form-group">
+        <label for="startTime">Start Time</label>
+        <input type="text" class="form-control" id="startTime" aria-describedby="sTimeHelp" placeholder="Enter shift starting time.">
+        <small id="sTimeHelp" class="form-text text-muted">Input as military time. Ex: 16:00</small>
+      </div>
+      <div class="form-group">
+        <label for="endTime">End Time</label>
+        <input type="text" class="form-control" id="endTime" aria-describedby="eTimeHelp" placeholder="Enter shift ending time.">
+        <small id="eTimeHelp" class="form-text text-muted">Input as military time. Ex: 16:00</small>
+      </div>
+      <div class="form-group">
+        <div>
+        <label for="date">Shift Date</label>
+        <input type="text" class="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter date for shift.">
+        <small id="dateHelp" class="form-text text-muted">Input as MM-DD-YY. Ex: 08-22-01</small>
+      </div>
+      </div>
+      <div class="form-group">
+        <div>
+        <label for="employees">Employees Working</label>
+        <input type="text" class="form-control" id="employees" aria-describedby="empHelp" placeholder="Enter employees working.">
+        <small id="empHelp" class="form-text text-muted">Input as a list of Employee IDs separated by commas. Ex: 1, 3, 9, 21</small>
+      </div>
+      <div class="form-group">
+        <input class="btn btn-danger" type="submit" name="shift" value="Add Shift">
+        <input class="btn btn-danger" type="submit" name="shift" value="Delete Shift">
+      </div>
+    </form>
+    <div class="msg">{{ msg }}</div>
   </body>
 
 {% endblock %}

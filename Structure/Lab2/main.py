@@ -228,17 +228,21 @@ def schedule():
         shifts = cursor.fetchall()
         return render_template('schedule.html', username=session['username'], shifts=shifts)
     # User is not loggedin redirect to login page
-    return redirect(url_for('schedule'))
+    return redirect(url_for('login'))
 
-@app.route('/schedule')
+@app.route('/schedule', methods=['GET', 'POST'])
 def addShift():
-    if request.method == ['POST']:
-        if request.form['shift'] == ['Add']:
-            flash("Added")
-        elif request.form['shift'] == ['Delete']:
-            flash("Deleted")
-    elif request.method == ['GET']:
-        return render_template('schedule.html', username=session['username'])
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    msg = ''
+    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employees' in request.form:
+        st = request.form['startTime']
+        et = request.form['endTime']
+        d = request.form['date']
+        emp = request.form['employees']
+        msg = 'Submission success!'
+    elif request.method == 'POST':
+        msg = 'Please provide the proper information'
+    return render_template('schedule.html', username=session['username'], msg=msg)
 
 
 if __name__ == '__main__':
