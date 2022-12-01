@@ -121,10 +121,11 @@ def get_data_from_html():
         ed = request.form['endDate']
         st = request.form['startTime']
         et = request.form['endTime']
-        p = request.form['Profits']
+        p = request.form['profits']
         if(p != None and p != ""):
-            p = float(p)
-
+            return render_template('calculator.html', productivity = 0)
+        if(p == 0):
+            return render_template('calculator.html', productivity = 0)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # make sure inputs are correct, fix if needed, then fix if statements to use minutes intstead of hours and minutes
@@ -136,12 +137,14 @@ def get_data_from_html():
         for row in raw:
             start.append(row.get("start_time"))
             end.append(row.get("end_time"))
-
+        
         minutes = 0
-        startSplit = [eval(i) for i in st.split(":")]
+        startSplit = [int(i) for i in st.split(":")]
         timeStart = int(startSplit[0])*60 + int(startSplit[1])
         endSplit = [eval(i) for i in et.split(":")]
         timeEnd = int(endSplit[0])*60 + int(endSplit[1])
+        if timeStart >= timeEnd or timeStart == timeEnd:
+            return render_template('calculator.html', productivity = 0)
         for x, y in zip(start, end):
             shiftStartSplit = [eval(i) for i in x.split(":")]
             shiftStart = int(shiftStartSplit[0]*60 + int(shiftStartSplit[1]))
@@ -158,7 +161,10 @@ def get_data_from_html():
                 shiftEnd = timeEnd
             minutes +=  shiftEnd - shiftStart
         hours = minutes / 60.0
-        productivity = float(int((p / hours) * 100.0))/100.0
+        if hours != 0:
+            productivity = float(int((p / hours) * 100.0))/100.0
+        else:
+            productivity = 0
         cursor.close()
         return render_template('calculator.html', productivity = productivity)
 
