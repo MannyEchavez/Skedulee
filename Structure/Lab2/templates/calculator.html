@@ -3,33 +3,34 @@
 {% block title %}Calculator{% endblock %}
 
 {% block content %}
-<form>
+<form method="POST" action="/calculator">
     <div class="row">
         <div class="col">
             <label for="startDate">Start Date:</label>
-        <input type="date" class="form-control" id="SD" name="startDate">
+        <input type="date" class="form-control" id="SD" name="startDate" required>
         </div>
         <div class="col">
             <label for="endDate">End Date:</label>
-        <input type="date" class="form-control" id="ED" name="endDate">
+        <input type="date" class="form-control" id="ED" name="endDate" required>
         </div>
     </div>
     <div class="row">
         <div class="col">
             <label for="startTime">Start Time:</label>
-        <input type="text" class="form-control" id="ST" name="startTime" placeholder="00:00">
+        <input type="time" class="form-control" id="ST" name="startTime" required>
         </div>
         <div class="col">
             <label for="endTime">End Time:</label>
-        <input type="text" class="form-control" id="ET" name="endTime" placeholder="00:00">
+        <input type="time" class="form-control" id="ET" name="endTime" required>
         </div>
     </div>
     <div class="form-group">
         <label for="Profits">Profits($):</label>
-                <input type="text" class="form-control " id="P" name="profits" placeholder="0.00">
+                <input type="number" class="form-control" id="P" name="profits" placeholder="0.00" step="0.01" min="0" required>
                 <small id="profitsHelp" class="form-text text-muted">Amount made during the time selected.</small>
     </div>
     <button type="submit" class="btn btn-danger">Calculate Productivity</button>
+    <P>${{productivity}}</P>
 </form>
 
 {% endblock %}
