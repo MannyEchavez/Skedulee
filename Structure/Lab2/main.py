@@ -231,15 +231,21 @@ def schedule():
     return redirect(url_for('login'))
 
 @app.route('/schedule', methods=['GET', 'POST'])
-def addShift():
+def shifts():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     msg = ''
-    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employees' in request.form:
+    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employees' in request.form and request.form['shiftRadio']=='add':
         st = request.form['startTime']
         et = request.form['endTime']
         d = request.form['date']
         emp = request.form['employees']
-        msg = 'Submission success!'
+        msg = 'Addition success!'
+    elif request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employees' in request.form and request.form['shiftRadio']=='remove':
+        st = request.form['startTime']
+        et = request.form['endTime']
+        d = request.form['date']
+        emp = request.form['employees']
+        msg = 'Removal success!'
     elif request.method == 'POST':
         msg = 'Please provide the proper information'
     return render_template('schedule.html', username=session['username'], msg=msg)
