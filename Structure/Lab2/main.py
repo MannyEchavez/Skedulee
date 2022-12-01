@@ -232,23 +232,31 @@ def schedule():
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def shifts():
+    #Instantiating cursor, and passing employee table through for employee selection dropdown menu in schedule.html
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    msg = ''
-    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employees' in request.form and request.form['shiftRadio']=='add':
+    cursor.execute('SELECT * FROM employee_t')
+    emp_t = cursor.fetchall()
+    msg = '' #Provides the user with a message depending on status.
+    #This if statement is for adding shifts. TODO: Add shift via SQL queries to the database
+    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and request.form['shiftRadio']=='add':
         st = request.form['startTime']
         et = request.form['endTime']
         d = request.form['date']
-        emp = request.form['employees']
+        emp = request.form['employee']
+        pos = request.form['position']
         msg = 'Addition success!'
-    elif request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employees' in request.form and request.form['shiftRadio']=='remove':
+    #This elif statement is for removing shifts.
+    elif request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and request.form['shiftRadio']=='remove':
         st = request.form['startTime']
         et = request.form['endTime']
         d = request.form['date']
-        emp = request.form['employees']
+        emp = request.form['employee']
+        pos = request.form['position']
         msg = 'Removal success!'
+    #This elif statement is triggered when the form is not fully filled out.
     elif request.method == 'POST':
-        msg = 'Please provide the proper information'
-    return render_template('schedule.html', username=session['username'], msg=msg)
+        msg = 'Please provide the proper information'   
+    return render_template('schedule.html', username=session['username'], msg=msg, emp_t=emp_t)
 
 
 if __name__ == '__main__':
