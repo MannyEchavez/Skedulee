@@ -65,6 +65,16 @@
         <input type="text" class="form-control" id="date" name="date" aria-describedby="dateHelp" placeholder="Enter date for shift.">
         <small id="dateHelp" class="form-text text-muted">Input as YYYY-MM-DD. Ex: 2022-12-01</small>
       </div>
+      <!--STORE DROPDOWN-->
+      <div class="form-group">
+        <label for="storeID">Store ID</label>
+        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
+        <option selected>Choose...</option>
+        {% for item in loc_t %}
+        <option>{{item['store_id']}}</option>
+        {% endfor %}
+        </select>
+      </div>
       <!--EMPLOYEE DROPDOWN-->
       <div class="form-group">
         <label for="employee">Employee</label>
@@ -73,7 +83,6 @@
         {% for item in emp_t %}
         <option>{{ item['employee_id'] }}</option> <!--TODO: allow dropdown menu to be populated based on employee_t entries-->
         {% endfor %}
-        <small id="employeeHelp" class="form-text text-muted">Select a valid employee from the dropdown menu.</small>
         </select>
       </div>
       <!--POSITION DROPDOWN-->
@@ -81,11 +90,9 @@
         <label for="position">Position</label>
         <select id="position" name="position" class="form-control" aria-describedby="positionHelp">
         <option selected>Choose...</option>
-        <option>As. Manager</option>
-        <option>Cashier</option>
-        <option>Cook</option>
-        <option>Manager</option>
-        <small id="positionHelp" class="form-text text-muted">Select a valid position from the dropdown menu.</small>
+        {% for item in pos_t %}
+        <option>{{item['position']}}</option>
+        {% endfor %}
         </select>
       </div>
       <!--ADD OR REMOVE SELECTION-->
