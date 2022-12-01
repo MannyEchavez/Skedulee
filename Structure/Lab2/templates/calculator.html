@@ -3,20 +3,33 @@
 {% block title %}Calculator{% endblock %}
 
 {% block content %}
-<h2>Labor Productivity Calculator</h2> 
-<form method="POST" action = "/calculator">
-    <label for="startDate">Start Date:</label><br>
-    SD: <input type="date" id="SD" name="startDate"><br>
-    <label for="endDate">End Date:</label><br>
-    ED: <input type="date" id="ED" name="endDate"><br>
-    <label for="startTime">Start Time:</label><br>
-    ST: <input type="text" id="ST" name="startTime"><br>
-    <label for="endTime">End Time:</label><br>
-    ET: <input type="text" id="ET" name="endTime"><br>
-    <label for="Profits:">Profits:</label><br>
-    P: <input type="number" id="P" name="Profits"><br>
-    <input class="btn btn-danger" type="submit" value="Calculate">
-    <P>{{productivity}}</P>
+<form>
+    <div class="row">
+        <div class="col">
+            <label for="startDate">Start Date:</label>
+        <input type="date" class="form-control" id="SD" name="startDate">
+        </div>
+        <div class="col">
+            <label for="endDate">End Date:</label>
+        <input type="date" class="form-control" id="ED" name="endDate">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="startTime">Start Time:</label>
+        <input type="text" class="form-control" id="ST" name="startTime" placeholder="00:00">
+        </div>
+        <div class="col">
+            <label for="endTime">End Time:</label>
+        <input type="text" class="form-control" id="ET" name="endTime" placeholder="00:00">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Profits">Profits($):</label>
+                <input type="text" class="form-control " id="P" name="profits" placeholder="0.00">
+                <small id="profitsHelp" class="form-text text-muted">Amount made during the time selected.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Calculate Productivity</button>
 </form>
 
 {% endblock %}
