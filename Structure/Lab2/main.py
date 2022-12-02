@@ -245,19 +245,19 @@ def shifts():
     #Instantiating cursor, and passing employee table through for employee selection dropdown menu in schedule.html
     msg = '' #Provides the user with a message depending on status.
     #This if statement is for adding shifts. TODO: Add shift via SQL queries to the database
-    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
-        st = request.form['startTime']
-        et = request.form['endTime']
-        d = request.form['date']
+    if request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
+        st = request.form['shiftStartTime']
+        et = request.form['shiftEndTime']
+        d = request.form['shiftDate']
         emp = request.form['employee']
         pos = request.form['position']
         store = request.form['storeID']
         msg = 'Addition success!'
     #This elif statement is for removing shifts.
-    elif request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
-        st = request.form['startTime']
-        et = request.form['endTime']
-        d = request.form['date']
+    elif request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
+        st = request.form['shiftStartTime']
+        et = request.form['shiftEndTime']
+        d = request.form['shiftDate']
         emp = request.form['employee']
         pos = request.form['position']
         store = request.form['storeID']
