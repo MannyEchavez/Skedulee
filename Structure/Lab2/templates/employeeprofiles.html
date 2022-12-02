@@ -5,8 +5,22 @@
 {% block content %}
 <h2>Profiles Page</h2>
 <!---TODO: Inserting Search function here *dab*-->
+<style>
+  .autosave-message {
+    text-align: right;
+    color: green
+  }
+  .autosave-message--saving {
+    color: greenyellow;
+  }
+</style>
+<script src="../static/saver.js"></script>
+
+
+<input class="btn btn-danger" type="submit" name="add" value="Add Employee">
 {% for item in emp_t %}
-<script src="function.js"></script>
+
+<div class = "card-group">
 <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">Employee {{ item['employee_id'] }} <img src="../static/defaultpfp.png" width="50px"> </h5>
@@ -20,11 +34,23 @@
     </ul>
     <div class="card-body">
         <!--TODO: create button functionalities-->
-        <a href="#" class="btn btn-danger" onclick="con()">Notes</a>
-        <a href="#" class="btn btn-danger" onclick="profileEdit()">Edit</a>
-        <a href="#" class="btn btn-danger" onclick="profileDelete()">Delete</a>
+        <form>
+        <input class="btn btn-danger" type="submit" name="Edit" value="Edit">
+        <input class="btn btn-danger" type="submit" name="Delete" value="Delete">
+      </form>
     </div>
   </div>
+  <div class="card" style="width: 18rem;">
+    <h5 class="card-title">Notes</h5>
+    <div class="card-body">
+      <textarea name="Notes" id="Notes" rows = "10" columns = "30" data-autosave-url="http://localhost:5000/employeeprofiles"  ></textarea>
+    </div>
+    <div class = "autosave-message"></div>
+    </div>
+</div>
+
+
 {% endfor %}
+
 
 {% endblock %}
