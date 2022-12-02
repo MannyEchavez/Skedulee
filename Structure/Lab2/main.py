@@ -251,6 +251,7 @@ def shifts():
         d = request.form['date']
         emp = request.form['employee']
         pos = request.form['position']
+        store = request.form['storeID']
         msg = 'Addition success!'
     #This elif statement is for removing shifts.
     elif request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
@@ -259,6 +260,7 @@ def shifts():
         d = request.form['date']
         emp = request.form['employee']
         pos = request.form['position']
+        store = request.form['storeID']
         msg = 'Removal success!'
     #This elif statement is triggered when the form is not fully filled out.
     elif request.method == 'POST':

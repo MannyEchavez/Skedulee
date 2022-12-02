@@ -9,6 +9,70 @@
   <link href='../static/calendar-20/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
   <script src="function.js"></script>
   <body>
+      <!--ADD AND DELETE SHIFT FORM HERE-->
+    <form action="{{ url_for('shifts') }}" method="POST" id="input">
+      <!--START TIME-->
+      <div class="form-group">
+        <label for="startTime">Start Time</label>
+        <input type="time" class="form-control" id="startTime" name="startTime" aria-describedby="sTimeHelp" placeholder="Enter shift starting time.">
+        <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
+      </div>
+      <!--END TIME-->
+      <div class="form-group">
+        <label for="endTime">End Time</label>
+        <input type="time" class="form-control" id="endTime" name="endTime" aria-describedby="eTimeHelp" placeholder="Enter shift ending time.">
+        <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
+      </div>
+      <!--DATE-->
+      <div class="form-group">
+        <label for="date">Shift Date</label>
+        <input type="text" class="form-control" id="date" name="date" aria-describedby="dateHelp" placeholder="Enter date for shift.">
+        <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
+      </div>
+      <!--STORE DROPDOWN-->
+      <div class="form-group">
+        <label for="storeID">Store ID</label>
+        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
+        <option selected>Choose...</option>
+        {% for item in loc_t %}
+        <option>{{item['store_id']}}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <!--EMPLOYEE DROPDOWN-->
+      <div class="form-group">
+        <label for="employee">Employee</label>
+        <select id="employee" name="employee" class="form-control" aria-describedby="employeeHelp">
+        <option selected>Choose...</option>
+        {% for item in emp_t %}
+        <option>{{ item['employee_id'] }}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <!--POSITION DROPDOWN-->
+      <div class="form-group">
+        <label for="position">Position</label>
+        <select id="position" name="position" class="form-control" aria-describedby="positionHelp">
+        <option selected>Choose...</option>
+        {% for item in pos_t %}
+        <option>{{item['position']}}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <!--ADD OR REMOVE SELECTION-->
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="add">
+        <label class="form-check-label" for="exampleRadios1">Add Shift</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="remove">
+        <label class="form-check-label" for="exampleRadios2">Remove Shift</label>
+      </div>
+      <!--SUBMISSION BUTTON-->
+        <input class="btn btn-danger" type="submit" name="shift" value="Submit">
+    </form>
+    <!--MESSAGE PRINTOUT-->
+    <div class="msg">{{ msg }}</div>  
   <!--BEGINNING OF CALENDAR RENDERING-->
   <div id='calendar-container'>
     <div id='calendar'></div>
@@ -38,77 +102,19 @@
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [ //inputs 'title' 'start' 'end' 'groupId' 'url'
-      //insert events here
+      {
+        title: 'Shift',
+        start: '2022-12-01T12:00', //document.getElementById('input').elements['date'].value, 
+        end: '2022-12-01T16:00'//document.getElementById('input').elements['date'].value
+      }
       ]
       });
       calendar.render();
+      alert(document.getElementById('input').elements['date'].value); //for testing
       });
     </script>
     <script src="../static/calendar-20/js/main.js"></script>
-    <!--ADD AND DELETE SHIFT FORM HERE-->
-    <form action="{{ url_for('shifts') }}" method="POST">
-      <!--START TIME-->
-      <div class="form-group">
-        <label for="startTime">Start Time</label>
-        <input type="text" class="form-control" id="startTime" name="startTime" aria-describedby="sTimeHelp" placeholder="Enter shift starting time.">
-        <small id="sTimeHelp" class="form-text text-muted">Input as military time. Ex: 16:00</small>
-      </div>
-      <!--END TIME-->
-      <div class="form-group">
-        <label for="endTime">End Time</label>
-        <input type="text" class="form-control" id="endTime" name="endTime" aria-describedby="eTimeHelp" placeholder="Enter shift ending time.">
-        <small id="eTimeHelp" class="form-text text-muted">Input as military time. Ex: 16:00</small>
-      </div>
-      <!--DATE-->
-      <div class="form-group">
-        <label for="date">Shift Date</label>
-        <input type="text" class="form-control" id="date" name="date" aria-describedby="dateHelp" placeholder="Enter date for shift.">
-        <small id="dateHelp" class="form-text text-muted">Input as YYYY-MM-DD. Ex: 2022-12-01</small>
-      </div>
-      <!--STORE DROPDOWN-->
-      <div class="form-group">
-        <label for="storeID">Store ID</label>
-        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
-        <option selected>Choose...</option>
-        {% for item in loc_t %}
-        <option>{{item['store_id']}}</option>
-        {% endfor %}
-        </select>
-      </div>
-      <!--EMPLOYEE DROPDOWN-->
-      <div class="form-group">
-        <label for="employee">Employee</label>
-        <select id="employee" name="employee" class="form-control" aria-describedby="employeeHelp">
-        <option selected>Choose...</option>
-        {% for item in emp_t %}
-        <option>{{ item['employee_id'] }}</option> <!--TODO: allow dropdown menu to be populated based on employee_t entries-->
-        {% endfor %}
-        </select>
-      </div>
-      <!--POSITION DROPDOWN-->
-      <div class="form-group">
-        <label for="position">Position</label>
-        <select id="position" name="position" class="form-control" aria-describedby="positionHelp">
-        <option selected>Choose...</option>
-        {% for item in pos_t %}
-        <option>{{item['position']}}</option>
-        {% endfor %}
-        </select>
-      </div>
-      <!--ADD OR REMOVE SELECTION-->
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="add">
-        <label class="form-check-label" for="exampleRadios1">Add Shift</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="remove">
-        <label class="form-check-label" for="exampleRadios2">Remove Shift</label>
-      </div>
-      <!--SUBMISSION BUTTON-->
-        <input class="btn btn-danger" type="submit" name="shift" value="Submit">
-    </form>
-    <!--MESSAGE PRINTOUT-->
-    <div class="msg">{{ msg }}</div>
+
   </body>
 
 {% endblock %}
