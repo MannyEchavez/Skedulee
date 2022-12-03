@@ -224,9 +224,10 @@ def employeeprofiles():
     return redirect(url_for('login'))
 
 @app.route('/employeeprofiles', methods = ['POST'])
-def add_employee():
+def employee_modifier():
     if request.method == 'POST':
-        if request.form['Add'] == 'Add':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        if 'Add' in request.form:
             id = request.form['id']
             firstName = request.form['firstName']
             lastName = request.form['lastName']
@@ -234,13 +235,25 @@ def add_employee():
             salary = request.form['salary']
             phone = request.form['phone']
 
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT employee_id FROM employee_t WHERE employee_id = %s', (id,))
             if len(cursor.fetchall()) == 0:
                 cursor.execute('INSERT INTO employee_t (employee_id, first_name, last_name, employee_email, wage_salary, phone_number) VALUES (%s, %s, %s, %s, %s, %s)', (id, firstName, lastName, email, salary, phone))
-                mysql.connection.commit()
-            cursor.close()
-            return redirect(url_for('employeeprofiles'))
+        elif 'Delete' in request.form:
+            id1 = request.form.get("Delete")
+
+            cursor.execute('DELETE FROM employee_t WHERE employee_id = %s', (id1,))
+        elif 'Edit' in request.form:
+            id = request.form['id3']
+            firstName = request.form['firstName1']
+            lastName = request.form['lastName1']
+            email = request.form['email1']
+            salary = request.form['salary1']
+            phone = request.form['phone1']
+            
+            cursor.execute('UPDATE employee_t SET first_name = %s, last_name = %s, employee_email = %s, wage_salary = %s, phone_number = %s WHERE employee_id = %s', (firstName, lastName, email, salary, phone, id))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('employeeprofiles'))
 
 #this will route to the schedule page
 @app.route('/schedule')

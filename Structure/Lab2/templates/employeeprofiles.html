@@ -17,7 +17,6 @@
 <script src="../static/saver.js"></script>
 
 
-<input class="btn btn-danger" type="submit" name="add" value="Add Employee">
 <div class="accordion" id="accordionExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
@@ -64,38 +63,84 @@
     </div>
   </div>
 </div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingTwo">
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+      Edit Employee
+    </button>
+  </h2>
+  <div id="collapseTwo" class="accordion-collapse collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+    <div class="accordion-body">
+    <!--EMPLOYEE DROPDOWN-->
+      <div class="form-group">
+        <form method = "POST" action = "/employeeprofiles">
+          <label for="employee">Employee</label>
+          <select id="ID3" name="id3" class="form-control" aria-describedby="employeeHelp">
+            <option selected>Choose...</option>
+            {% for item in emp_t %}
+              <option value = "{{ item['employee_id'] }}">{{ item['employee_id'] }}</option>
+            {% endfor %}
+          </select>
+          <div class="row">
+              <div class="col">
+                  <label for="firstName">First Name:</label>
+                  <input type="text" class="form-control" id="FN1" name="firstName1" required>
+              </div>
+
+              <div class="col">
+                  <label for="lastName">Last Name:</label>
+                  <input type="text" class="form-control" id="LN1" name="lastName1" required>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <label for="phone">Phone Number:</label>
+                  <input type="text" class="form-control" id="P1" name="phone1" placeholder="###-###-####" required>
+              </div>
+              <div class="col">
+                <label for="email">Email Address:</label>
+                <input type="text" class="form-control" id="E1" name="email1" placeholder="example@example.ex" required>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <label for="salary">Hourly Pay:</label>
+                <input type="number" class="form-control" id="S1" name="salary1" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-danger" name="Edit" value = "Edit">Edit Employee</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% for item in emp_t %}
 
 <div class = "card-group">
-<div class="card" style="width: 18rem;">
+  <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">Employee {{ item['employee_id'] }} <img src="../static/defaultpfp.png" width="50px"> </h5>
       <p class="card-text"></p>
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{ item['first_name'] }}  {{ item['last_name'] }}</li>
+      <li class="list-group-item">{{ item['first_name'] }}  {{ item['last_name'] }}</li>
       <li class="list-group-item">{{ item['employee_email'] }}</li>
       <li class="list-group-item">{{ item['phone_number'] }}</li>
       <li class="list-group-item">{{ item['wage_salary'] }} per hour</li>
     </ul>
-    <div class="card-body">
-        <!--TODO: create button functionalities-->
-        <form>
-        <input class="btn btn-danger" type="submit" name="Edit" value="Edit">
-        <input class="btn btn-danger" type="submit" name="Delete" value="Delete">
-      </form>
-    </div>
+    <form method ="POST" action = "/employeeprofiles">
+      <button type="submit" class="btn btn-danger" name="Delete" value = "{{ item['employee_id'] }}">Delete</button>
+    </form>
   </div>
   <div class="card" style="width: 18rem;">
     <h5 class="card-title">Notes</h5>
     <div class="card-body">
       <textarea name="Notes" id="Notes" rows = "10" columns = "30" data-autosave-url="http://localhost:5000/employeeprofiles"  ></textarea>
     </div>
-    <div class = "autosave-message"></div>
-    </div>
+  </div>
 </div>
-
-
 {% endfor %}
 
 
