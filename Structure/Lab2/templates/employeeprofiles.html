@@ -18,6 +18,52 @@
 
 
 <input class="btn btn-danger" type="submit" name="add" value="Add Employee">
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        Add Employee
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <form method="POST" action="/employeeprofiles">
+          <div class="row">
+              <div class="col">
+                  <label for="firstName">First Name:</label>
+                  <input type="text" class="form-control" id="FN" name="firstName" required>
+              </div>
+              <div class="col">
+                  <label for="lastName">Last Name:</label>
+                  <input type="text" class="form-control" id="LN" name="lastName" required>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <label for="phone">Phone Number:</label>
+                  <input type="text" class="form-control" id="P" name="phone" placeholder="###-###-####" required>
+              </div>
+              <div class="col">
+                  <label for="email">Email Address:</label>
+                  <input type="text" class="form-control" id="E" name="email" placeholder="example@example.ex" required>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <label for="id">ID:</label>
+                  <input type="number" class="form-control" id="ID" name="id" min="0" step="1" required>
+              </div>
+              <div class="col">
+                  <label for="salary">Hourly Pay:</label>
+                  <input type="number" class="form-control" id="S" name="salary" placeholder="0.00" step="0.01" min="0" required>
+              </div>
+          </div>
+          <button type="submit" class="btn btn-danger" name="Add" value = "Add">Add Employee</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% for item in emp_t %}
 
 <div class = "card-group">

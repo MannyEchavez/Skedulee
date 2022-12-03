@@ -9,61 +9,35 @@
   <link href='../static/calendar-20/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
   <script src="function.js"></script>
   <body>
-  <!--BEGINNING OF CALENDAR RENDERING-->
-  <div id='calendar-container'>
-    <div id='calendar'></div>
-  </div>
-    <script src="../static/calendar-20/js/jquery-3.3.1.min.js"></script>
-    <script src="../static/calendar-20/js/popper.min.js"></script>
-    <script src="../static/calendar-20/js/bootstrap.min.js"></script>
-    <script src='../static/calendar-20/fullcalendar/packages/core/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/interaction/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/daygrid/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/timegrid/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/list/main.js'></script>
-    <!--CALENDAR JAVASCRIPT-->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
-        height: 'parent',
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'},
-      defaultView: 'dayGridMonth',
-      defaultDate: '2022-12-01', //YYYY-MM-DD format
-      navLinks: true, // can click day/week names to navigate views
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      events: [ //inputs 'title' 'start' 'end' 'groupId' 'url'
-      //insert events here
-      ]
-      });
-      calendar.render();
-      });
-    </script>
-    <script src="../static/calendar-20/js/main.js"></script>
-    <!--ADD AND DELETE SHIFT FORM HERE-->
-    <form action="{{ url_for('shifts') }}" method="POST">
+      <!--ADD AND DELETE SHIFT FORM HERE-->
+    <form id="shiftForm" name="shiftForm" action="{{ url_for('shifts') }}" method="POST">
       <!--START TIME-->
       <div class="form-group">
-        <label for="startTime">Start Time</label>
-        <input type="text" class="form-control" id="startTime" name="startTime" aria-describedby="sTimeHelp" placeholder="Enter shift starting time.">
-        <small id="sTimeHelp" class="form-text text-muted">Input as military time. Ex: 16:00</small>
+        <label for="shiftStartTime">Start Time</label>
+        <input type="text" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp">
+        <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
       </div>
       <!--END TIME-->
       <div class="form-group">
-        <label for="endTime">End Time</label>
-        <input type="text" class="form-control" id="endTime" name="endTime" aria-describedby="eTimeHelp" placeholder="Enter shift ending time.">
-        <small id="eTimeHelp" class="form-text text-muted">Input as military time. Ex: 16:00</small>
+        <label for="shiftEndTime">End Time</label>
+        <input type="text" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp">
+        <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
       </div>
       <!--DATE-->
       <div class="form-group">
-        <label for="date">Shift Date</label>
-        <input type="text" class="form-control" id="date" name="date" aria-describedby="dateHelp" placeholder="Enter date for shift.">
-        <small id="dateHelp" class="form-text text-muted">Input as YYYY-MM-DD. Ex: 2022-12-01</small>
+        <label for="shiftDate">Shift Date</label>
+        <input type="text" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp">
+        <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
+      </div>
+      <!--STORE DROPDOWN-->
+      <div class="form-group">
+        <label for="storeID">Store ID</label>
+        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
+        <option selected>Choose...</option>
+        {% for item in loc_t %}
+        <option>{{item['store_id']}}</option>
+        {% endfor %}
+        </select>
       </div>
       <!--EMPLOYEE DROPDOWN-->
       <div class="form-group">
@@ -71,9 +45,8 @@
         <select id="employee" name="employee" class="form-control" aria-describedby="employeeHelp">
         <option selected>Choose...</option>
         {% for item in emp_t %}
-        <option>{{ item['employee_id'] }}</option> <!--TODO: allow dropdown menu to be populated based on employee_t entries-->
+        <option>{{ item['employee_id'] }}</option>
         {% endfor %}
-        <small id="employeeHelp" class="form-text text-muted">Select a valid employee from the dropdown menu.</small>
         </select>
       </div>
       <!--POSITION DROPDOWN-->
@@ -81,11 +54,9 @@
         <label for="position">Position</label>
         <select id="position" name="position" class="form-control" aria-describedby="positionHelp">
         <option selected>Choose...</option>
-        <option>As. Manager</option>
-        <option>Cashier</option>
-        <option>Cook</option>
-        <option>Manager</option>
-        <small id="positionHelp" class="form-text text-muted">Select a valid position from the dropdown menu.</small>
+        {% for item in pos_t %}
+        <option>{{item['position']}}</option>
+        {% endfor %}
         </select>
       </div>
       <!--ADD OR REMOVE SELECTION-->
@@ -101,7 +72,52 @@
         <input class="btn btn-danger" type="submit" name="shift" value="Submit">
     </form>
     <!--MESSAGE PRINTOUT-->
-    <div class="msg">{{ msg }}</div>
+    <div class="msg">{{ msg }}</div>  
+
+  <!--BEGINNING OF CALENDAR RENDERING-->
+  <div id='calendar-container'>
+    <div id='calendar'></div>
+  </div>
+    <script src="../static/calendar-20/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/calendar-20/js/popper.min.js"></script>
+    <script src="../static/calendar-20/js/bootstrap.min.js"></script>
+    <script src='../static/calendar-20/fullcalendar/packages/core/main.js'></script>
+    <script src='../static/calendar-20/fullcalendar/packages/interaction/main.js'></script>
+    <script src='../static/calendar-20/fullcalendar/packages/daygrid/main.js'></script>
+    <script src='../static/calendar-20/fullcalendar/packages/timegrid/main.js'></script>
+    <script src='../static/calendar-20/fullcalendar/packages/list/main.js'></script>
+    <!--CALENDAR JAVASCRIPT-->
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+        height: 'parent',
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'},
+      defaultView: 'dayGridMonth',
+      defaultDate: '2022-12-01', //YYYY-MM-DD format
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [ //inputs 'title' 'start' 'end' 'groupId' 'url'
+          {
+          title: "test",
+          start: "2022-12-02 06:00",
+          end: "2022-12-02 12:00",
+          allDay: false
+          }
+      ]
+      });
+      calendar.render();
+      });
+    </script>
+
+    <script src="../static/calendar-20/js/main.js"></script>
+
   </body>
 
 {% endblock %}

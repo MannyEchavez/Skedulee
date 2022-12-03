@@ -121,10 +121,11 @@ def get_data_from_html():
         ed = request.form['endDate']
         st = request.form['startTime']
         et = request.form['endTime']
-        p = request.form['Profits']
+        p = request.form['profits']
         if(p != None and p != ""):
-            p = float(p)
-
+            return render_template('calculator.html', productivity = 0)
+        if(p == 0):
+            return render_template('calculator.html', productivity = 0)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # make sure inputs are correct, fix if needed, then fix if statements to use minutes intstead of hours and minutes
@@ -136,12 +137,14 @@ def get_data_from_html():
         for row in raw:
             start.append(row.get("start_time"))
             end.append(row.get("end_time"))
-
+        
         minutes = 0
-        startSplit = [eval(i) for i in st.split(":")]
+        startSplit = [int(i) for i in st.split(":")]
         timeStart = int(startSplit[0])*60 + int(startSplit[1])
         endSplit = [eval(i) for i in et.split(":")]
         timeEnd = int(endSplit[0])*60 + int(endSplit[1])
+        if timeStart >= timeEnd or timeStart == timeEnd:
+            return render_template('calculator.html', productivity = 0)
         for x, y in zip(start, end):
             shiftStartSplit = [eval(i) for i in x.split(":")]
             shiftStart = int(shiftStartSplit[0]*60 + int(shiftStartSplit[1]))
@@ -158,7 +161,10 @@ def get_data_from_html():
                 shiftEnd = timeEnd
             minutes +=  shiftEnd - shiftStart
         hours = minutes / 60.0
-        productivity = float(int((p / hours) * 100.0))/100.0
+        if hours != 0:
+            productivity = float(int((p / hours) * 100.0))/100.0
+        else:
+            productivity = 0
         cursor.close()
         return render_template('calculator.html', productivity = productivity)
 
@@ -217,46 +223,68 @@ def employeeprofiles():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/employeeprofiles', methods = ['POST'])
+def add_employee():
+    if request.method == 'POST':
+        if request.form['Add'] == 'Add':
+            id = request.form['id']
+            firstName = request.form['firstName']
+            lastName = request.form['lastName']
+            email = request.form['email']
+            salary = request.form['salary']
+            phone = request.form['phone']
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT employee_id FROM employee_t WHERE employee_id = %s', (id,))
+            if len(cursor.fetchall()) == 0:
+                cursor.execute('INSERT INTO employee_t (employee_id, first_name, last_name, employee_email, wage_salary, phone_number) VALUES (%s, %s, %s, %s, %s, %s)', (id, firstName, lastName, email, salary, phone))
+                mysql.connection.commit()
+            cursor.close()
+            return redirect(url_for('employeeprofiles'))
+
 #this will route to the schedule page
 @app.route('/schedule')
 def schedule():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM employee_t')
+    emp_t=cursor.fetchall()
+    cursor.execute('SELECT * FROM position_t')
+    pos_t=cursor.fetchall()
+    cursor.execute('SELECT * FROM location_t')
+    loc_t=cursor.fetchall()
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM shift_t')
-        shifts = cursor.fetchall()
-        return render_template('schedule.html', username=session['username'], shifts=shifts)
+        return render_template('schedule.html', username=session['username'], emp_t=emp_t, pos_t=pos_t, loc_t=loc_t)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def shifts():
     #Instantiating cursor, and passing employee table through for employee selection dropdown menu in schedule.html
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM employee_t')
-    emp_t = cursor.fetchall()
     msg = '' #Provides the user with a message depending on status.
     #This if statement is for adding shifts. TODO: Add shift via SQL queries to the database
-    if request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and request.form['shiftRadio']=='add':
-        st = request.form['startTime']
-        et = request.form['endTime']
-        d = request.form['date']
+    if request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
+        st = request.form['shiftStartTime']
+        et = request.form['shiftEndTime']
+        d = request.form['shiftDate']
         emp = request.form['employee']
         pos = request.form['position']
+        store = request.form['storeID']
         msg = 'Addition success!'
     #This elif statement is for removing shifts.
-    elif request.method == 'POST' and 'startTime' in request.form and 'endTime' in request.form and 'date' in request.form and 'employee' in request.form and 'position' in request.form and request.form['shiftRadio']=='remove':
-        st = request.form['startTime']
-        et = request.form['endTime']
-        d = request.form['date']
+    elif request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
+        st = request.form['shiftStartTime']
+        et = request.form['shiftEndTime']
+        d = request.form['shiftDate']
         emp = request.form['employee']
         pos = request.form['position']
+        store = request.form['storeID']
         msg = 'Removal success!'
     #This elif statement is triggered when the form is not fully filled out.
     elif request.method == 'POST':
-        msg = 'Please provide the proper information'   
-    return render_template('schedule.html', username=session['username'], msg=msg, emp_t=emp_t)
+        msg = 'Please provide the proper information'
+    return render_template('schedule.html', username=session['username'], msg=msg)
 
 
 if __name__ == '__main__':
