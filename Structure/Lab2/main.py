@@ -223,6 +223,25 @@ def employeeprofiles():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/employeeprofiles', methods = ['POST'])
+def add_employee():
+    if request.method == 'POST':
+        if request.form['Add'] == 'Add':
+            id = request.form['id']
+            firstName = request.form['firstName']
+            lastName = request.form['lastName']
+            email = request.form['email']
+            salary = request.form['salary']
+            phone = request.form['phone']
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT employee_id FROM employee_t WHERE employee_id = %s', (id,))
+            if len(cursor.fetchall()) == 0:
+                cursor.execute('INSERT INTO employee_t (employee_id, first_name, last_name, employee_email, wage_salary, phone_number) VALUES (%s, %s, %s, %s, %s, %s)', (id, firstName, lastName, email, salary, phone))
+                mysql.connection.commit()
+            cursor.close()
+            return redirect(url_for('employeeprofiles'))
+
 #this will route to the schedule page
 @app.route('/schedule')
 def schedule():
