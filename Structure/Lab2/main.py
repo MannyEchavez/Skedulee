@@ -265,16 +265,17 @@ def schedule():
     pos_t=cursor.fetchall()
     cursor.execute('SELECT * FROM location_t')
     loc_t=cursor.fetchall()
+    cursor.execute('SELECT * FROM shift_t')
+    shf_t=cursor.fetchall()
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('schedule.html', username=session['username'], emp_t=emp_t, pos_t=pos_t, loc_t=loc_t)
+        return render_template('schedule.html', username=session['username'], emp_t=emp_t, pos_t=pos_t, loc_t=loc_t, shf_t=shf_t)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def shifts():
-    #Instantiating cursor, and passing employee table through for employee selection dropdown menu in schedule.html
     msg = '' #Provides the user with a message depending on status.
     #This if statement is for adding shifts. TODO: Add shift via SQL queries to the database
     if request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
@@ -298,7 +299,6 @@ def shifts():
     elif request.method == 'POST':
         msg = 'Please provide the proper information'
     return render_template('schedule.html', username=session['username'], msg=msg)
-
 
 if __name__ == '__main__':
     app.run()

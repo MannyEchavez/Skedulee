@@ -10,23 +10,23 @@
   <script src="function.js"></script>
   <body>
       <!--ADD AND DELETE SHIFT FORM HERE-->
-    <form id="shiftForm" name="shiftForm" action="{{ url_for('shifts') }}" method="POST">
+    <form id="shiftForm" name="shiftForm" action="/schedule" method="POST">
       <!--START TIME-->
       <div class="form-group">
         <label for="shiftStartTime">Start Time</label>
-        <input type="text" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp">
+        <input type="time" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp">
         <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
       </div>
       <!--END TIME-->
       <div class="form-group">
         <label for="shiftEndTime">End Time</label>
-        <input type="text" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp">
+        <input type="time" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp">
         <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
       </div>
       <!--DATE-->
       <div class="form-group">
         <label for="shiftDate">Shift Date</label>
-        <input type="text" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp">
+        <input type="date" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp">
         <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
       </div>
       <!--STORE DROPDOWN-->
@@ -69,7 +69,7 @@
         <label class="form-check-label" for="exampleRadios2">Remove Shift</label>
       </div>
       <!--SUBMISSION BUTTON-->
-        <input class="btn btn-danger" type="submit" name="shift" value="Submit">
+        <input class="btn btn-danger" type="submit" name="shift" id="submitButton" value="Submit" onclick="submitForm()">
     </form>
     <!--MESSAGE PRINTOUT-->
     <div class="msg">{{ msg }}</div>  
@@ -88,7 +88,10 @@
     <script src='../static/calendar-20/fullcalendar/packages/list/main.js'></script>
     <!--CALENDAR JAVASCRIPT-->
     <script>
-
+      function submitForm(){
+        let form = document.getElementById('shiftForm');
+        form.submit();
+      }
       document.addEventListener('DOMContentLoaded', function() {
       var calendarEl = document.getElementById('calendar');
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -105,9 +108,11 @@
       eventLimit: true, // allow "more" link when too many events
       events: [ //inputs 'title' 'start' 'end' 'groupId' 'url'
           {
-          title: "test",
-          start: "2022-12-02 06:00",
-          end: "2022-12-02 12:00",
+          title: 'test',
+          startTime: form.elements['shiftStartTime'].value,
+          endTime: form.elements['shiftEndTime'].value,
+          start: form.elements['shiftDate'].value,
+          end: form.elements['shiftDate'].value,
           allDay: false
           }
       ]
