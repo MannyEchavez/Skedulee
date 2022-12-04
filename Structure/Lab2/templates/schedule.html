@@ -8,133 +8,243 @@
   <link href='../static/calendar-20/fullcalendar/packages/core/main.css' rel='stylesheet' />
   <link href='../static/calendar-20/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
   <script src="function.js"></script>
-  <body>
-      <!--ADD AND DELETE SHIFT FORM HERE-->
-    <form id="shiftForm" name="shiftForm" action="/schedule" method="POST">
-      <!--SHIFT ID-->
-      <div class="form-group">
-        <label for="shiftID">Shift ID</label>
-        <input type="text" class="form-control" id="shiftID" name="shiftID" aria-describedby="shiftIDHelp">
-        <small id="shiftIDHelp" class="form-text text-muted">ID for shift, be sure to use a unique identifier.</small>
-      </div>
-      <!--EMPLOYEE DROPDOWN-->
-      <div class="form-group">
-        <label for="employee">Employee</label>
-        <select id="employee" name="employee" class="form-control" aria-describedby="employeeHelp">
-        <option selected>Choose...</option>
-        {% for item in emp_t %}
-        <option>{{ item['employee_id'] }}</option>
-        {% endfor %}
-        </select>
-      </div>
-      <!--POSITION DROPDOWN-->
-      <div class="form-group">
-        <label for="position">Position</label>
-        <select id="position" name="position" class="form-control" aria-describedby="positionHelp">
-        <option selected>Choose...</option>
-        {% for item in pos_t %}
-        <option>{{item['position']}}</option>
-        {% endfor %}
-        </select>
-      </div>
-      <!--STORE DROPDOWN-->
-      <div class="form-group">
-        <label for="storeID">Store ID</label>
-        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
-        <option selected>Choose...</option>
-        {% for item in loc_t %}
-        <option>{{item['store_id']}}</option>
-        {% endfor %}
-        </select>
-      </div>
-      <!--DATE-->
-      <div class="form-group">
-        <label for="shiftDate">Shift Date</label>
-        <input type="date" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp">
-        <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
-      </div>
-      <!--START TIME-->
-      <div class="form-group">
-        <label for="shiftStartTime">Start Time</label>
-        <input type="time" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp">
-        <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
-      </div>
-      <!--END TIME-->
-      <div class="form-group">
-        <label for="shiftEndTime">End Time</label>
-        <input type="time" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp">
-        <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
-      </div>
-      <!--ATTENDENCE-->
-      <div class="form-group">
-        <label for="shiftID">Attendence</label>
-        <input type="text" class="form-control" id="attendence" name="attendence" aria-describedby="attendenceHelp">
-        <small id="attendenceHelp" class="form-text text-muted">Write notes on attendence of this shift. You may also leave this blank.</small>
-      </div>
-       <!--ADD OR REMOVE SELECTION-->
-       <div class="form-check">
-        <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="add">
-        <label class="form-check-label" for="exampleRadios1">Add Shift</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="remove">
-        <label class="form-check-label" for="exampleRadios2">Remove Shift</label>
-      </div>
-      <!--SUBMISSION BUTTON-->
-        <input class="btn btn-danger" type="submit" name="shift" id="submitButton" value="Submit" onclick="submitForm()">
-    </form>
-    <!--MESSAGE PRINTOUT-->
-    <div class="msg">{{ msg }}</div>  
 
-  <!--BEGINNING OF CALENDAR RENDERING-->
-  <div id='calendar-container'>
-    <div id='calendar'></div>
+  <div class="msg">{{ msg }}</div>  
+
+  <div class="accordion" id="acc1">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="h1">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          Add Shift
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <form method="POST" action="/schedule">
+            <!--SHIFT ID-->
+            <div class="form-group">
+              <label for="shiftID">Shift ID</label>
+              <input type="number" class="form-control" id="shiftID" name="shiftID" min="0" step="1" aria-describedby="shiftIDHelp" required>
+              <small id="shiftIDHelp" class="form-text text-muted">ID for shift, be sure to use a unique identifier.</small>
+            </div>
+            <!--EMPLOYEE DROPDOWN-->
+            <div class="form-group">
+              <label for="employee">Employee</label>
+              <select id="employee" name="employee" class="form-control" aria-describedby="employeeHelp" required>
+                <option selected>Choose...</option>
+                {% for item in emp_t %}
+                  <option>{{ item['employee_id'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!--POSITION DROPDOWN-->
+            <div class="form-group">
+              <label for="position">Position</label>
+              <select id="position" name="position" class="form-control" aria-describedby="positionHelp" required>
+                <option selected>Choose...</option>
+                {% for item in pos_t %}
+                  <option>{{item['position']}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!--STORE DROPDOWN-->
+            <div class="form-group">
+              <label for="storeID">Store ID</label>
+              <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp" required>
+                <option selected>Choose...</option>
+                {% for item in loc_t %}
+                  <option>{{item['store_id']}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!--DATE-->
+            <div class="form-group">
+              <label for="shiftDate">Shift Date</label>
+              <input type="date" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp" required>
+              <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
+            </div>
+            <!--START TIME-->
+            <div class="form-group">
+              <label for="shiftStartTime">Start Time</label>
+              <input type="time" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp" required>
+              <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
+            </div>
+            <!--END TIME-->
+            <div class="form-group">
+              <label for="shiftEndTime">End Time</label>
+              <input type="time" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp" required>
+              <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
+            </div>
+            <!--ATTENDENCE-->
+            <div class="form-group">
+              <label for="shiftID">Attendence</label>
+              <input type="text" class="form-control" id="attendence" name="attendence" aria-describedby="attendenceHelp">
+              <small id="attendenceHelp" class="form-text text-muted">Write notes on attendence of this shift. You may also leave this blank.</small>
+            </div>
+            <!--SUBMISSION BUTTON-->
+            <input class="btn btn-danger" type="submit" name="Add" id="Add" value="Add" onclick="submitForm()">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="h2">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Edit Shift
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <form method="POST" action="/schedule">
+            <!--SHIFT ID-->
+            <div class="form-group">
+              <label for="shiftID">Shift ID</label>
+              <select id="shiftID" name="shiftID" class="form-control" aria-describedby="shiftIDHelp" required>
+                <option selected>Choose...</option>
+                {% for item in shf_t %}
+                  <option>{{item['shift_id']}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!--EMPLOYEE DROPDOWN-->
+            <div class="form-group">
+              <label for="employee">Employee</label>
+              <select id="employee" name="employee" class="form-control" aria-describedby="employeeHelp" required>
+                <option selected>Choose...</option>
+                {% for item in emp_t %}
+                  <option>{{ item['employee_id'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!--POSITION DROPDOWN-->
+            <div class="form-group">
+              <label for="position">Position</label>
+              <select id="position" name="position" class="form-control" aria-describedby="positionHelp" required>
+                <option selected>Choose...</option>
+                {% for item in pos_t %}
+                  <option>{{item['position']}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!--STORE DROPDOWN-->
+            <div class="form-group">
+              <label for="storeID">Store ID</label>
+              <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp" required>
+              <option selected>Choose...</option>
+              {% for item in loc_t %}
+                <option>{{item['store_id']}}</option>
+              {% endfor %}
+              </select>
+            </div>
+            <!--DATE-->
+            <div class="form-group">
+              <label for="shiftDate">Shift Date</label>
+              <input type="date" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp" required>
+              <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
+            </div>
+            <!--START TIME-->
+            <div class="form-group">
+              <label for="shiftStartTime">Start Time</label>
+              <input type="time" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp" required>
+              <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
+            </div>
+            <!--END TIME-->
+            <div class="form-group">
+              <label for="shiftEndTime">End Time</label>
+              <input type="time" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp" required>
+              <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
+            </div>
+            <!--ATTENDENCE-->
+            <div class="form-group">
+              <label for="shiftID">Attendence</label>
+              <input type="text" class="form-control" id="attendence" name="attendence" aria-describedby="attendenceHelp">
+              <small id="attendenceHelp" class="form-text text-muted">Write notes on attendence of this shift. You may also leave this blank.</small>
+            </div>
+            <!--SUBMISSION BUTTON-->
+            <input class="btn btn-danger" type="submit" name="Edit" id="Edit" value="Edit" onclick="submitForm()">
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="h3">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Remove Shift
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+        <!--EMPLOYEE DROPDOWN-->
+          <div class="form-group">
+            <form method = "POST" action = "/schedule">
+              <!--SHIFT ID-->
+              <div class="form-group">
+                <label for="shiftID">Shift ID</label>
+                <select id="shiftID" name="shiftID" class="form-control" aria-describedby="shiftIDHelp" required>
+                  <option selected>Choose...</option>
+                  {% for item in shf_t %}
+                    <option>{{item['shift_id']}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <!--SUBMISSION BUTTON-->
+              <input class="btn btn-danger" type="submit" name="Delete" id="Delete" value="Delete" onclick="submitForm()">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-    <script src="../static/calendar-20/js/jquery-3.3.1.min.js"></script>
-    <script src="../static/calendar-20/js/popper.min.js"></script>
-    <script src="../static/calendar-20/js/bootstrap.min.js"></script>
-    <script src='../static/calendar-20/fullcalendar/packages/core/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/interaction/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/daygrid/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/timegrid/main.js'></script>
-    <script src='../static/calendar-20/fullcalendar/packages/list/main.js'></script>
-    <!--CALENDAR JAVASCRIPT-->
-    <script>
-      function submitForm(){
-        let form = document.getElementById('shiftForm');
-        form.submit();
-      }
-      document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
-        height: 'parent',
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'},
-      defaultView: 'dayGridMonth',
-      defaultDate: '2022-12-01', //YYYY-MM-DD format
-      navLinks: true, // can click day/week names to navigate views
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      events: [ //inputs 'title' 'start' 'end' 'groupId' 'url'
-          {
-          title: 'test',
-          startTime: form.elements['shiftStartTime'].value,
-          endTime: form.elements['shiftEndTime'].value,
-          start: form.elements['shiftDate'].value,
-          end: form.elements['shiftDate'].value,
-          allDay: false
-          }
-      ]
-      });
-      calendar.render();
-      });
-    </script>
 
-    <script src="../static/calendar-20/js/main.js"></script>
-
-  </body>
+  <body>
+    <div id='calendar-container'>
+      <div id='calendar'></div>
+    </div>
+      <script src="../static/calendar-20/js/jquery-3.3.1.min.js"></script>
+      <script src="../static/calendar-20/js/popper.min.js"></script>
+      <script src="../static/calendar-20/js/bootstrap.min.js"></script>
+      <script src='../static/calendar-20/fullcalendar/packages/core/main.js'></script>
+      <script src='../static/calendar-20/fullcalendar/packages/interaction/main.js'></script>
+      <script src='../static/calendar-20/fullcalendar/packages/daygrid/main.js'></script>
+      <script src='../static/calendar-20/fullcalendar/packages/timegrid/main.js'></script>
+      <script src='../static/calendar-20/fullcalendar/packages/list/main.js'></script>
+      <!--CALENDAR JAVASCRIPT-->
+      <script>
+  
+        document.addEventListener('DOMContentLoaded', function() {
+  
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          plugins: [ 'interaction', 'list' ],
+          height: 'parent',
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listWeek'},
+        defaultView: 'dayGridMonth',
+        defaultDate: '2022-12-01', //YYYY-MM-DD format
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        events: [ //inputs 'title' 'start' 'end' 'groupId' 'url'
+            
+            {
+                title : 'Title',
+                start : '2022-12-02 06:00',
+                end : '2022-12-02 12:00',
+                allday: false,
+            },
+            
+        ]
+        });
+        calendar.render();
+        });
+      </script>
+  
+      <script src="../static/calendar-20/js/main.js"></script>
+  
+    </body>
 
 {% endblock %}

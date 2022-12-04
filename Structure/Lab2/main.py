@@ -216,16 +216,22 @@ def employeeprofiles():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM employee_t')
         emp_t = cursor.fetchall()
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM notes_t')
         note_t = cursor.fetchall()
-        return render_template('employeeprofiles.html', username=session['username'], emp_t=emp_t, note_t=note_t) 
+        cursor.execute('SELECT * FROM position_t')
+        pos_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM role_t')
+        role_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM location_t')
+        loc_t = cursor.fetchall()
+        return render_template('employeeprofiles.html', username=session['username'], emp_t=emp_t, note_t=note_t, pos_t=pos_t, role_t=role_t, loc_t=loc_t) 
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
 @app.route('/employeeprofiles', methods = ['POST'])
 def employee_modifier():
     if request.method == 'POST':
+        msg = ''
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if 'Add' in request.form:
             id = request.form['id']
@@ -238,10 +244,18 @@ def employee_modifier():
             cursor.execute('SELECT employee_id FROM employee_t WHERE employee_id = %s', (id,))
             if len(cursor.fetchall()) == 0:
                 cursor.execute('INSERT INTO employee_t (employee_id, first_name, last_name, employee_email, wage_salary, phone_number) VALUES (%s, %s, %s, %s, %s, %s)', (id, firstName, lastName, email, salary, phone))
+                msg = "Added successfully!"
+            else:
+                msg = "Employee ID already used."
         elif 'Delete' in request.form:
-            id1 = request.form.get("Delete")
+            id = request.form.get("Delete")
 
-            cursor.execute('DELETE FROM employee_t WHERE employee_id = %s', (id1,))
+            cursor.execute('SELECT employee_id FROM employee_t WHERE employee_id = %s', (id,))
+            if len(cursor.fetchall()) == 1:
+                cursor.execute('DELETE FROM employee_t WHERE employee_id = %s', (id,))
+                msg = "Deleted successfully!"
+            else:
+                msg = "Shift ID does not exist."
         elif 'Edit' in request.form:
             id = request.form['id3']
             firstName = request.form['firstName1']
@@ -250,10 +264,56 @@ def employee_modifier():
             salary = request.form['salary1']
             phone = request.form['phone1']
             
-            cursor.execute('UPDATE employee_t SET first_name = %s, last_name = %s, employee_email = %s, wage_salary = %s, phone_number = %s WHERE employee_id = %s', (firstName, lastName, email, salary, phone, id))
+            cursor.execute('SELECT employee_id FROM employee_t WHERE employee_id = %s', (id,))
+            if len(cursor.fetchall()) == 1:
+                cursor.execute('UPDATE employee_t SET first_name = %s, last_name = %s, employee_email = %s, wage_salary = %s, phone_number = %s WHERE employee_id = %s', (firstName, lastName, email, salary, phone, id))
+                msg = "Edited successfully!"
+            else:
+                msg = "Employee ID does not exist."
+        elif 'Save' in request.form:
+            Notes = request.form['Notes']
+            id = request.form['Save']
+
+            cursor.execute('SELECT employee_id FROM notes_t WHERE employee_id = %s', (id,))
+            if len(cursor.fetchall()) == 1:
+                cursor.execute('UPDATE notes_t SET description = %s WHERE employee_id = %s', (Notes, id))
+            else:
+                cursor.execute('INSERT INTO notes_t (employee_id, description) VALUES (%s, %s)', (id, Notes))
+        elif 'AddP' in request.form:
+            id = request.form["shid"]
+            employee = request.form["employee"]
+            position = request.form["position"]
+            store = request.form["storeID"]
+
+            cursor.execute('SELECT role_id FROM role_t WHERE role_id = %s', (id,))
+            if len(cursor.fetchall()) == 0:
+                cursor.execute('INSERT INTO role_t (role_id, employee_id, position, store_id) VALUES (%s, %s, %s, %s)', (id, employee, position, store))
+                msg = "Added position successfully!"
+            else:
+                msg = "Role ID already used."
+        elif 'RemoveR' in request.form:
+            id = request.form["role"]
+
+            cursor.execute('SELECT role_id FROM role_t WHERE role_id = %s', (id,))
+            if len(cursor.fetchall()) == 1:
+                cursor.execute('DELETE FROM role_t WHERE role_id = %s', (id,))
+                msg = "Removed position successfully!"
+            else:
+                msg = "Role ID does not exist."
+
         mysql.connection.commit()
+        cursor.execute('SELECT * FROM employee_t')
+        emp_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM notes_t')
+        note_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM position_t')
+        pos_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM role_t')
+        role_t = cursor.fetchall()
+        cursor.execute('SELECT * FROM location_t')
+        loc_t = cursor.fetchall()
         cursor.close()
-        return redirect(url_for('employeeprofiles'))
+        return render_template('employeeprofiles.html', username=session['username'], emp_t=emp_t, note_t=note_t, msg=msg, pos_t=pos_t, role_t=role_t, loc_t=loc_t) 
 
 #this will route to the schedule page
 @app.route('/schedule')
@@ -276,33 +336,65 @@ def schedule():
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def shifts():
-    msg = '' #Provides the user with a message depending on status.
-    #This if statement is for adding shifts. TODO: Add shift via SQL queries to the database
-    if request.method == 'POST' and 'shiftID' in request.form and 'attendence' in request.form and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
-        st = request.form['shiftStartTime']
-        et = request.form['shiftEndTime']
-        d = request.form['shiftDate']
-        emp = request.form['employee']
-        pos = request.form['position']
-        store = request.form['storeID']
-        shid = request.form['shiftID']
-        att = request.form['attendence']
-        msg = 'Addition success!'
-    #This elif statement is for removing shifts.
-    elif request.method == 'POST' and 'shiftID' in request.form and 'attendence' in request.form and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
-        st = request.form['shiftStartTime']
-        et = request.form['shiftEndTime']
-        d = request.form['shiftDate']
-        emp = request.form['employee']
-        pos = request.form['position']
-        store = request.form['storeID']
-        shid = request.form['shiftID']
-        att = request.form['attendence']
-        msg = 'Removal success!'
-    #This elif statement is triggered when the form is not fully filled out.
-    elif request.method == 'POST':
-        msg = 'Please provide the proper information'
-    return render_template('schedule.html', username=session['username'], msg=msg)
+    if request.method == 'POST':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        msg=''
+        if 'Add' in request.form:
+            shid = request.form['shiftID']
+            emid = request.form['employee']
+            pos = request.form['position']
+            stid = request.form['storeID']
+            date = request.form['shiftDate']
+            start = request.form['shiftStartTime']
+            end = request.form['shiftEndTime']
+            att = request.form['attendence']
+
+            cursor.execute('SELECT shift_id FROM shift_t WHERE shift_id = %s', (shid,))
+            if len(cursor.fetchall()) == 0:
+                cursor.execute('SELECT role_id FROM role_t WHERE employee_id = %s AND position = %s AND store_id = %s', (emid, pos, stid))
+                if len(cursor.fetchall()) == 1:
+                    cursor.execute('INSERT INTO shift_t (shift_id, employee_id, position, store_id, date, start_time, end_time, attendence) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (shid, emid, pos, stid, date, start, end, att))
+                    msg = "Added successfully!"
+                else:
+                    msg = "Employee, role and store combination does not exist."
+            else:
+                msg = "Shift ID already used."
+        elif 'Delete' in request.form:
+            shid = request.form["shiftID"]
+
+            cursor.execute('SELECT shift_id FROM shift_t WHERE shift_id = %s', (shid,))
+            if len(cursor.fetchall()) == 1:
+                cursor.execute('DELETE FROM shift_t WHERE shift_id = %s', (shid,))
+                msg = "Deleted successfully!"
+            else:
+                msg = "Shift ID does not exist."
+        elif 'Edit' in request.form:
+            shid = request.form['shiftID']
+            emid = request.form['employee']
+            pos = request.form['position']
+            stid = request.form['storeID']
+            date = request.form['shiftDate']
+            start = request.form['shiftStartTime']
+            end = request.form['shiftEndTime']
+            att = request.form['attendence']
+            
+            cursor.execute('SELECT role_id FROM role_t WHERE employee_id = %s AND position = %s AND store_id = %s', (emid, pos, stid))
+            if len(cursor.fetchall()) == 1:
+                cursor.execute('UPDATE shift_t SET employee_id = %s, position = %s, store_id = %s, date = %s, start_time = %s, end_time = %s, attendence = %s WHERE shift_id = %s', (emid, pos, stid, date, start, end, att, shid))
+                msg = "Edited successfully!"
+            else:
+                msg = "Employee, role and store combination does not exist."
+        mysql.connection.commit()
+        cursor.execute('SELECT * FROM employee_t')
+        emp_t=cursor.fetchall()
+        cursor.execute('SELECT * FROM position_t')
+        pos_t=cursor.fetchall()
+        cursor.execute('SELECT * FROM location_t')
+        loc_t=cursor.fetchall()
+        cursor.execute('SELECT * FROM shift_t')
+        shf_t=cursor.fetchall()
+        cursor.close()
+        return render_template('schedule.html', username=session['username'], msg=msg, emp_t=emp_t, pos_t=pos_t, loc_t=loc_t, shf_t=shf_t)
 
 if __name__ == '__main__':
     app.run()
