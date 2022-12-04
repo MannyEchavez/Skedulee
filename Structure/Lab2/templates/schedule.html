@@ -11,33 +11,11 @@
   <body>
       <!--ADD AND DELETE SHIFT FORM HERE-->
     <form id="shiftForm" name="shiftForm" action="/schedule" method="POST">
-      <!--START TIME-->
+      <!--SHIFT ID-->
       <div class="form-group">
-        <label for="shiftStartTime">Start Time</label>
-        <input type="time" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp">
-        <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
-      </div>
-      <!--END TIME-->
-      <div class="form-group">
-        <label for="shiftEndTime">End Time</label>
-        <input type="time" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp">
-        <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
-      </div>
-      <!--DATE-->
-      <div class="form-group">
-        <label for="shiftDate">Shift Date</label>
-        <input type="date" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp">
-        <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
-      </div>
-      <!--STORE DROPDOWN-->
-      <div class="form-group">
-        <label for="storeID">Store ID</label>
-        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
-        <option selected>Choose...</option>
-        {% for item in loc_t %}
-        <option>{{item['store_id']}}</option>
-        {% endfor %}
-        </select>
+        <label for="shiftID">Shift ID</label>
+        <input type="text" class="form-control" id="shiftID" name="shiftID" aria-describedby="shiftIDHelp">
+        <small id="shiftIDHelp" class="form-text text-muted">ID for shift, be sure to use a unique identifier.</small>
       </div>
       <!--EMPLOYEE DROPDOWN-->
       <div class="form-group">
@@ -59,8 +37,42 @@
         {% endfor %}
         </select>
       </div>
-      <!--ADD OR REMOVE SELECTION-->
-      <div class="form-check">
+      <!--STORE DROPDOWN-->
+      <div class="form-group">
+        <label for="storeID">Store ID</label>
+        <select id="storeID" name="storeID" class="form-control" aria-describedby="storeIDHelp">
+        <option selected>Choose...</option>
+        {% for item in loc_t %}
+        <option>{{item['store_id']}}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <!--DATE-->
+      <div class="form-group">
+        <label for="shiftDate">Shift Date</label>
+        <input type="date" class="form-control" id="shiftDate" name="shiftDate" aria-describedby="dateHelp">
+        <small id="dateHelp" class="form-text text-muted">Input date of shift in YYYY-MM-DD format.</small>
+      </div>
+      <!--START TIME-->
+      <div class="form-group">
+        <label for="shiftStartTime">Start Time</label>
+        <input type="time" class="form-control" id="shiftStartTime" name="shiftStartTime" aria-describedby="sTimeHelp">
+        <small id="sTimeHelp" class="form-text text-muted">Input start of shift.</small>
+      </div>
+      <!--END TIME-->
+      <div class="form-group">
+        <label for="shiftEndTime">End Time</label>
+        <input type="time" class="form-control" id="shiftEndTime" name="shiftEndTime" aria-describedby="eTimeHelp">
+        <small id="eTimeHelp" class="form-text text-muted">Input end of shift.</small>
+      </div>
+      <!--ATTENDENCE-->
+      <div class="form-group">
+        <label for="shiftID">Attendence</label>
+        <input type="text" class="form-control" id="attendence" name="attendence" aria-describedby="attendenceHelp">
+        <small id="attendenceHelp" class="form-text text-muted">Write notes on attendence of this shift. You may also leave this blank.</small>
+      </div>
+       <!--ADD OR REMOVE SELECTION-->
+       <div class="form-check">
         <input class="form-check-input" type="radio" name="shiftRadio" id="shiftRadio" value="add">
         <label class="form-check-label" for="exampleRadios1">Add Shift</label>
       </div>

@@ -278,22 +278,26 @@ def schedule():
 def shifts():
     msg = '' #Provides the user with a message depending on status.
     #This if statement is for adding shifts. TODO: Add shift via SQL queries to the database
-    if request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
+    if request.method == 'POST' and 'shiftID' in request.form and 'attendence' in request.form and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='add':
         st = request.form['shiftStartTime']
         et = request.form['shiftEndTime']
         d = request.form['shiftDate']
         emp = request.form['employee']
         pos = request.form['position']
         store = request.form['storeID']
+        shid = request.form['shiftID']
+        att = request.form['attendence']
         msg = 'Addition success!'
     #This elif statement is for removing shifts.
-    elif request.method == 'POST' and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
+    elif request.method == 'POST' and 'shiftID' in request.form and 'attendence' in request.form and 'shiftStartTime' in request.form and 'shiftEndTime' in request.form and 'shiftDate' in request.form and 'employee' in request.form and 'position' in request.form and 'storeID' in request.form and request.form['shiftRadio']=='remove':
         st = request.form['shiftStartTime']
         et = request.form['shiftEndTime']
         d = request.form['shiftDate']
         emp = request.form['employee']
         pos = request.form['position']
         store = request.form['storeID']
+        shid = request.form['shiftID']
+        att = request.form['attendence']
         msg = 'Removal success!'
     #This elif statement is triggered when the form is not fully filled out.
     elif request.method == 'POST':
