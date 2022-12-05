@@ -119,8 +119,6 @@ def get_data_from_html():
         st = request.form['startTime']
         et = request.form['endTime']
         p = request.form['profits']
-        if(p != None and p != ""):
-            return render_template('calculator.html', productivity = 0)
         if(p == 0):
             return render_template('calculator.html', productivity = 0)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -138,14 +136,14 @@ def get_data_from_html():
         minutes = 0
         startSplit = [int(i) for i in st.split(":")]
         timeStart = int(startSplit[0])*60 + int(startSplit[1])
-        endSplit = [eval(i) for i in et.split(":")]
+        endSplit = [int(i) for i in et.split(":")]
         timeEnd = int(endSplit[0])*60 + int(endSplit[1])
         if timeStart >= timeEnd or timeStart == timeEnd:
             return render_template('calculator.html', productivity = 0)
         for x, y in zip(start, end):
-            shiftStartSplit = [eval(i) for i in x.split(":")]
+            shiftStartSplit = [int(i) for i in x.split(":")]
             shiftStart = int(shiftStartSplit[0]*60 + int(shiftStartSplit[1]))
-            shiftEndSplit = [eval(i) for i in y.split(":")]
+            shiftEndSplit = [int(i) for i in y.split(":")]
             shiftEnd = int(shiftEndSplit[0]*60 + int(shiftEndSplit[1]))
             if(shiftStart > timeEnd or shiftEnd < timeStart):
                 # if the start of the shift is after the desired end OR the end of the shift is before the desired start, then no need to check hours
@@ -159,7 +157,7 @@ def get_data_from_html():
             minutes +=  shiftEnd - shiftStart
         hours = minutes / 60.0
         if hours != 0:
-            productivity = float(int((p / hours) * 100.0))/100.0
+            productivity = float(int((float(p) / hours) * 100.0))/100.0
         else:
             productivity = 0
         cursor.close()
