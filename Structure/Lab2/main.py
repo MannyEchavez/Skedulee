@@ -62,12 +62,11 @@ def logout():
 def register():
     # Output message if something goes wrong...
     msg = ''
-    # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'employee_id' in request.form and 'password' in request.form and 'email' in request.form :
+    # Check if "username", "employee_id" and "password" POST requests exist (user submitted form)
+    if request.method == 'POST' and 'username' in request.form and 'employee_id' in request.form and 'password' in request.form:
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
-        email = request.form['email']
         employeeid = request.form['employee_id']
 
         # Check if account exists using MySQL
@@ -77,15 +76,13 @@ def register():
         # If account exists show error and validation checks
         if account:
             msg = 'Account already exists!'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address!'
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
+        elif not username or not password:
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO user_t (username, employee_id, password, email) VALUES ( %s, %s, %s, %s)', (username, employeeid, password, email,)) 
+            cursor.execute('INSERT INTO user_t (username, employee_id, password) VALUES ( %s, %s, %s)', (username, employeeid, password,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
